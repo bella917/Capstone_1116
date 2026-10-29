@@ -1,52 +1,974 @@
-<!-- EMPLOYEE PAGE -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Page</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f5f7;
+            color: #242833;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left Side Navigation */
+        .sidebar {
+            width: 220px;
+            background-color: #1c1e1d;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            color: #a678f4;
+            font-size: 21px;
+            margin-bottom: 35px;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 13px 16px;
+            margin-bottom: 6px;
+            background: transparent;
+            border: none;
+            border-radius: 20px;
+            color: #d4d4d4;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background: linear-gradient(to right, #9857f5, #39206b);
+            color: white;
+        }
+
+        .nav-bottom {
+            margin-top: auto;
+        }
+
+        .divider {
+            border-top: 1px solid #39404b;
+            margin: 18px 10px;
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px 40px;
+            background-color: white;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 20px;
+        }
+
+        .search {
+            width: 350px;
+            max-width: 100%;
+            padding: 12px 18px;
+            border: 1px solid #e4e4e4;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .account {
+            color: #7945c9;
+            font-size: 26px;
+        }
+
+        h1 {
+            font-size: 25px;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        /* Screen Navigation */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .notification-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .notification-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 170px;
+        }
+
+        .purple-button {
+            background: linear-gradient(to right, #9857f5, #39206b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .purple-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Empty Data Areas */
+        .empty {
+            padding: 35px 15px;
+            text-align: center;
+            color: #777;
+            border: 1px dashed #d5d5d5;
+            border-radius: 12px;
+            background-color: #fafafa;
+        }
+
+        /* Assignment Chart */
+        .donut {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: #eee8fc;
+            margin: 25px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-center {
+            width: 105px;
+            height: 105px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        /* Tables */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        th {
+            background-color: #7640e8;
+            color: white;
+        }
+
+        /* Calendar */
+        .calendar {
+            background-color: #f5f6fb;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .calendar-controls button {
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 5px;
+        }
+
+        .day-name {
+            text-align: center;
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .calendar-day {
+            min-height: 85px;
+            background-color: white;
+            border: 1px solid #eeeeee;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .calendar-day.today {
+            border: 2px solid #9857f5;
+            background: #f4edff;
+        }
+
+        .calendar-day.blank {
+            background: transparent;
+            border: none;
+        }
+
+        /* Progress */
+        .progress-bar {
+            width: 100%;
+            background-color: #e6d8fa;
+            border-radius: 20px;
+            height: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #8852e8;
+            border-radius: 20px;
+        }
+
+        /* Chat Form */
+        .message-form {
+            max-width: 480px;
+            margin: 20px auto;
+            background-color: #1d2a55;
+            color: white;
+            padding: 30px;
+            border-radius: 18px;
+        }
+
+        .message-form h2 {
+            font-size: 28px;
+            margin-top: 0;
+        }
+
+        .message-form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .message-form input,
+        .message-form textarea {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            font-family: Arial, sans-serif;
+        }
+
+        .message-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .message-form button {
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .cards,
+            .notification-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+            }
+
+            .calendar {
+                padding: 10px;
+            }
+
+            .calendar-day {
+                min-height: 60px;
+                padding: 5px;
+            }
+        }
+    </style>
+
 </head>
 
-<body style="background-color: lightgray;">
-    
+<body>
 
-<!-- Left Side Navigation Menu -->
-<div style="text-align: left; width: 200px;">
+<div class="layout">
 
-    <!-- Dashboard button -->
-    <button onclick="showPage('dashboard')"
-        style="background-color: blue; color: white; font-size: 18px; width: 100%; margin-bottom: 10px;">
-        Dashboard
-    </button>
+    <!-- LEFT SIDE NAVIGATION MENU -->
+    <div class="sidebar">
 
-    <!-- Assignments button -->
-    <button onclick="showPage('assignments')"
-        style="background-color: blue; color: white; font-size: 18px; width: 100%; margin-bottom: 10px;">
-        Assignments
-    </button>
+        <div class="brand">
+            ▰ Company Name
+        </div>
 
-    <!-- Schedule button -->
-    <button onclick="showPage('schedule')"
-        style="background-color: blue; color: white; font-size: 18px; width: 100%; margin-bottom: 10px;">
-        Schedule
-    </button>
+        <!-- Dashboard -->
+        <button class="nav-button active"
+                data-screen="dashboard"
+                onclick="showPage('dashboard')">
+            ▦ Dashboard
+        </button>
 
-    <!-- Progress button -->
-    <button onclick="showPage('progress')"
-        style="background-color: blue; color: white; font-size: 18px; width: 100%; margin-bottom: 10px;">
-        Progress
-    </button>
+        <!-- Assignments -->
+        <button class="nav-button"
+                data-screen="assignments"
+                onclick="showPage('assignments')">
+            ◎ Assignments
+        </button>
 
-    <!-- Chatbox button -->
-    <button onclick="showPage('Chatbox')"
-        style="background-color: blue; color: white; font-size: 18px; width: 100%; margin-bottom: 10px;">
-        Chatbox
-    </button>
+        <!-- Schedule -->
+        <button class="nav-button"
+                data-screen="schedule"
+                onclick="showPage('schedule')">
+            ▦ Schedule
+        </button>
+
+        <!-- Progress -->
+        <button class="nav-button"
+                data-screen="progress"
+                onclick="showPage('progress')">
+            ◕ Progress
+        </button>
+
+        <!-- Chat -->
+        <button class="nav-button"
+                data-screen="chat"
+                onclick="showPage('chat')">
+            ● Chat
+        </button>
+
+        <!-- Bottom Navigation -->
+        <div class="nav-bottom">
+
+            <button class="nav-button"
+                    data-screen="profile"
+                    onclick="showPage('profile')">
+                ♙ Profile
+            </button>
+
+            <button class="nav-button"
+                    data-screen="settings"
+                    onclick="showPage('settings')">
+                ⚙ Settings
+            </button>
+
+            <button class="nav-button"
+                    onclick="window.location.href='index.html'">
+                ↪ Logout
+            </button>
+
+            <div class="divider"></div>
+
+            <button class="nav-button"
+                    data-screen="help"
+                    onclick="showPage('help')">
+                ? Help & Support
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+
+            <h1>Welcome Back!</h1>
+
+            <input class="search"
+                   type="search"
+                   placeholder="Search assignments, schedule, etc.">
+
+            <div class="account">
+                ☺ ▣
+            </div>
+
+        </div>
+
+
+        <!-- SCREEN 1: DASHBOARD -->
+        <section id="dashboard" class="screen active">
+
+            <h2>Your Dashboard</h2>
+
+            <div class="cards">
+
+                <!-- Notifications -->
+                <div class="card">
+
+                    <h3>Notifications</h3>
+
+                    <div class="notification-cards">
+
+                        <div class="notification-card">
+                            <h3>Schedule Updates</h3>
+
+                            <p>
+                                Schedule notifications
+                                will appear here.
+                            </p>
+
+                            <button class="purple-button"
+                                    onclick="showPage('schedule')">
+                                Continue
+                            </button>
+                        </div>
+
+                        <div class="notification-card">
+                            <h3>New Assignments</h3>
+
+                            <p>
+                                Assignment notifications
+                                will appear here.
+                            </p>
+
+                            <button class="purple-button"
+                                    onclick="showPage('assignments')">
+                                Continue
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Assignment Summary -->
+                <div class="card">
+
+                    <h3>Assignments</h3>
+
+                    <div class="donut">
+                        <div class="donut-center">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="empty">
+                        No assignments available.
+                    </div>
+
+                    <br>
+
+                    <button class="purple-button"
+                            onclick="showPage('assignments')">
+                        See Details
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 2: ASSIGNMENTS -->
+        <section id="assignments" class="screen">
+
+            <h2>My Assignments</h2>
+
+            <div class="cards">
+
+                <!-- Assignment Table -->
+                <div class="card">
+
+                    <h3>Assignment List</h3>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Assignment</th>
+                                    <th>Due Date</th>
+                                    <th>Priority</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="4"
+                                        style="text-align:center;">
+                                        No assignments have been added yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- Assignment Overview -->
+                <div class="card">
+
+                    <h3>Assignments</h3>
+
+                    <div class="donut">
+                        <div class="donut-center">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="empty">
+                        No assignment statistics available.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 3: SCHEDULE -->
+        <section id="schedule" class="screen">
+
+            <h2>My Schedule</h2>
+
+            <div class="calendar">
+
+                <div class="calendar-header">
+
+                    <h2 id="calendar-month">Month</h2>
+
+                    <div class="calendar-controls">
+
+                        <button onclick="changeMonth(-1)">
+                            &#10094;
+                        </button>
+
+                        <span id="calendar-year"></span>
+
+                        <button onclick="changeMonth(1)">
+                            &#10095;
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="calendar-grid" id="calendar-grid">
+
+                    <!-- Calendar generated by JavaScript -->
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="card">
+
+                <h3>Upcoming Schedule</h3>
+
+                <div class="empty">
+                    No scheduled shifts or events have been added.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 4: PROGRESS -->
+        <section id="progress" class="screen">
+
+            <h2>My Progress</h2>
+
+            <div class="card">
+
+                <h3>Assignment Completion</h3>
+
+                <p>Overall Progress: 0%</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="empty">
+                    Your assignment progress will appear here
+                    once assignments are added.
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Completed Assignments</h3>
+
+                <div class="empty">
+                    No completed assignments yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 5: CHAT -->
+        <section id="chat" class="screen">
+
+            <div class="message-form">
+
+                <h2>Send a Message Here</h2>
+
+                <form id="message-form">
+
+                    <label for="sender-name">
+                        Your Name
+                    </label>
+
+                    <input type="text"
+                           id="sender-name"
+                           name="sender-name"
+                           required>
+
+                    <label for="sender-email">
+                        Your Email
+                    </label>
+
+                    <input type="email"
+                           id="sender-email"
+                           name="sender-email"
+                           required>
+
+                    <label for="recipient-email">
+                        Recipient Email
+                    </label>
+
+                    <input type="email"
+                           id="recipient-email"
+                           name="recipient-email"
+                           required>
+
+                    <label for="message">
+                        Message
+                    </label>
+
+                    <textarea id="message"
+                              name="message"
+                              required></textarea>
+
+                    <button class="purple-button"
+                            type="submit">
+                        Submit
+                    </button>
+
+                </form>
+
+                <p id="message-status"></p>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+        <section id="profile" class="screen">
+
+            <h2>My Profile</h2>
+
+            <div class="card">
+
+                <h3>Employee Information</h3>
+
+                <p>Name: --</p>
+                <p>Email: --</p>
+                <p>Department: --</p>
+                <p>Position: --</p>
+                <p>Company Join Date: --</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+        <section id="settings" class="screen">
+
+            <h2>Settings</h2>
+
+            <div class="card">
+
+                <h3>Account Settings</h3>
+
+                <p>
+                    Account settings and preferences
+                    will be added here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- HELP AND SUPPORT -->
+        <section id="help" class="screen">
+
+            <h2>Help & Support</h2>
+
+            <div class="card">
+
+                <h3>Need Assistance?</h3>
+
+                <p>
+                    Help and support information
+                    will be available here.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
-</body>
-</html>
 
 
-    
+<!-- JAVASCRIPT -->
+<script>
+
+    // Switch between employee pages
+    function showPage(pageId) {
+
+        // Hide all screens
+        let screens = document.querySelectorAll(".screen");
+
+        screens.forEach(function(screen) {
+            screen.classList.remove("active");
+        });
+
+        // Show selected screen
+        let selectedScreen = document.getElementById(pageId);
+
+        if (selectedScreen) {
+            selectedScreen.classList.add("active");
+        }
+
+        // Remove active highlight from sidebar
+        let buttons = document.querySelectorAll(".nav-button");
+
+        buttons.forEach(function(button) {
+            button.classList.remove("active");
+        });
+
+        // Highlight selected sidebar button
+        let selectedButton = document.querySelector(
+            '.nav-button[data-screen="' + pageId + '"]'
+        );
+
+        if (selectedButton) {
+            selectedButton.classList.add("active");
+        }
+
+    }
+
+
+    // Calendar
+    let currentDate = new Date();
+
+    function renderCalendar() {
+
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth();
+
+        let monthName = currentDate.toLocaleDateString(
+            "en-US",
+            { month: "long" }
+        );
+
+        document.getElementById("calendar-month").textContent =
+            monthName;
+
+        document.getElementById("calendar-year").textContent =
+            year;
+
+        let calendarGrid = document.getElementById("calendar-grid");
+
+        calendarGrid.innerHTML = "";
+
+        let weekdays = [
+            "Sun", "Mon", "Tue", "Wed",
+            "Thu", "Fri", "Sat"
+        ];
+
+        weekdays.forEach(function(day) {
+
+            let dayElement = document.createElement("div");
+
+            dayElement.className = "day-name";
+            dayElement.textContent = day;
+
+            calendarGrid.appendChild(dayElement);
+
+        });
+
+        let firstDay = new Date(year, month, 1).getDay();
+
+        let daysInMonth = new Date(
+            year,
+            month + 1,
+            0
+        ).getDate();
+
+        // Empty boxes before first day
+        for (let i = 0; i < firstDay; i++) {
+
+            let blank = document.createElement("div");
+
+            blank.className = "calendar-day blank";
+
+            calendarGrid.appendChild(blank);
+
+        }
+
+        // Generate calendar dates
+        for (let day = 1; day <= daysInMonth; day++) {
+
+            let dayElement = document.createElement("div");
+
+            dayElement.className = "calendar-day";
+            dayElement.textContent =
+                String(day).padStart(2, "0");
+
+            let today = new Date();
+
+            if (
+                day === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear()
+            ) {
+                dayElement.classList.add("today");
+            }
+
+            calendarGrid.appendChild(dayElement);
+
+        }
+
+    }
+
+    // Previous / next month
+    function changeMonth(amount) {
+
+        currentDate.setDate(1);
+        currentDate.setMonth(
+            currentDate.getMonth() + amount
+        );
+
+        renderCalendar();
+
+    }
+
+    // Initialize calendar
+    renderCalendar();
+
+
+    // Demonstration chat form
+    document.getElementById("message-form").addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            document.getElementById("message-status").textContent =
+                "Message form completed. Sending is not connected yet.";
+
+        }
+    );
+
+</script>
+
 </body>
 </html>
