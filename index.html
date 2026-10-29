@@ -3,26 +3,31 @@
 <html>
 <head>
     <title>Login Page</title>
-    <img src="TaskSync Blue Gradient Logo.png" alt="TaskSync Logo"
-     width="200" height="200">
 </head>
 
 <body style="background-color: lightgray; text-align: center; font-size: 20px;">
 
     <h1 style="font-size: 48px;">Company Log in Page</h1>
 
+    <!-- Company Logo -->
+    <img src="TaskSync Blue Gradient Logo.png"
+         alt="TaskSync Logo"
+         width="200" height="200">
+
+    <br><br>
+
     <form>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username"
             placeholder="Enter your username"
-               style="font-size: 20px; padding: 8px;">
+            style="font-size: 20px; padding: 8px;">
 
         <br><br>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password"
             placeholder="Enter your password"
-               style="font-size: 20px; padding: 8px;">
+            style="font-size: 20px; padding: 8px;">
 
         <br><br>
 
@@ -35,28 +40,27 @@
         </button>
     </form>
 
-    
-<script>
-document.querySelector("form").addEventListener("submit", function(event) {
-    event.preventDefault();
+    <script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault();
 
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
 
-    if (username === "admin" && password === "admin123") {
-        window.location.href = "administrator.html";
-    }
-    else if (username === "manager" && password === "manager123") {
-        window.location.href = "manager.html";
-    }
-    else if (username === "employee" && password === "employee123") {
-        window.location.href = "employee.html";
-    }
-    else {
-        alert("Invalid username or password.");
-    }
-});
-</script>
+        if (username === "admin" && password === "admin123") {
+            window.location.href = "administrator.html";
+        }
+        else if (username === "manager" && password === "manager123") {
+            window.location.href = "manager.html";
+        }
+        else if (username === "employee" && password === "employee123") {
+            window.location.href = "employee.html";
+        }
+        else {
+            alert("Invalid username or password.");
+        }
+    });
+    </script>
 
 </body>
 </html>
