@@ -3,28 +3,6 @@
 <html>
 <head>
     <title>Login Page</title>
-
-    <script>
-    document.querySelector("form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-
-    if (username === "admin" && password === "admin123") {
-        window.location.href = "administrator.html";
-    }
-    else if (username === "manager" && password === "manager123") {
-        window.location.href = "manager.html";
-    }
-    else if (username === "employee" && password === "employee123") {
-        window.location.href = "employee.html";
-    }
-    else {
-        alert("Invalid username or password.");
-    }
-});
-</script>
 </head>
 
 <body style="background-color: lightgray; text-align: center; font-size: 20px;">
@@ -54,6 +32,29 @@
             Clear
         </button>
     </form>
+
+    
+<script>
+document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    if (username === "admin" && password === "admin123") {
+        window.location.href = "administrator.html";
+    }
+    else if (username === "manager" && password === "manager123") {
+        window.location.href = "manager.html";
+    }
+    else if (username === "employee" && password === "employee123") {
+        window.location.href = "employee.html";
+    }
+    else {
+        alert("Invalid username or password.");
+    }
+});
+</script>
 
 </body>
 </html>
