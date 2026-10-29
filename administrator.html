@@ -1,54 +1,1067 @@
 
-<!-- ADMIN PAGE -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrator Page</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f5f7;
+            color: #242833;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* LEFT SIDE NAVIGATION */
+        .sidebar {
+            width: 220px;
+            background-color: #161c27;
+            color: white;
+            padding: 25px 15px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            color: #f18b8b;
+            font-size: 21px;
+            margin-bottom: 35px;
+            font-weight: bold;
+            padding-left: 10px;
+        }
+
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 13px 16px;
+            margin-bottom: 6px;
+            background: transparent;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            text-align: left;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background: linear-gradient(to right, #f08080, #8b2525);
+            color: white;
+        }
+
+        .nav-bottom {
+            margin-top: auto;
+        }
+
+        .divider {
+            border-top: 1px solid #39404b;
+            margin: 20px 10px;
+        }
+
+        /* MAIN CONTENT */
+        .content {
+            flex: 1;
+            min-width: 0;
+            padding: 30px 40px;
+            background-color: white;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 20px;
+        }
+
+        .search {
+            width: 380px;
+            max-width: 100%;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+
+        .account {
+            color: #c54e4e;
+            font-size: 25px;
+        }
+
+        /* SCREEN SWITCHING */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 25px;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .red-button {
+            background: linear-gradient(to right, #f08080, #8b2525);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .red-button:hover {
+            opacity: 0.9;
+        }
+
+        .red-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .empty {
+            padding: 35px 15px;
+            text-align: center;
+            color: gray;
+            border: 1px dashed #ccc;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        /* STATISTICS */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 25px;
+            margin-top: 15px;
+            color: #b33b3b;
+        }
+
+        /* TABLES */
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f5e5e5;
+        }
+
+        /* PROGRESS BARS */
+        .progress {
+            width: 100%;
+            height: 22px;
+            background: #f4c2c2;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ba4848;
+            border-radius: 20px;
+        }
+
+        /* REPORTS */
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .report-card {
+            border: 1px solid #e5e5e5;
+            border-radius: 15px;
+            padding: 25px;
+            background: #fffafa;
+        }
+
+        .report-card h3 {
+            color: #a63232;
+        }
+
+        .report-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* CHAT */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .chat-box {
+            min-height: 350px;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 850px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .cards,
+            .stats,
+            .report-grid,
+            .chat-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+            }
+        }
+
+    </style>
 </head>
 
-<body style="background-color: lightgray;">
+<body>
 
-    <!-- Left Side Navigation Menu -->
-    <div style="text-align: left; width: 200px;">
+<div class="layout">
 
-        <!-- Dashboard button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Dashboard
+    <!-- LEFT SIDE NAVIGATION MENU -->
+    <div class="sidebar">
+
+        <div class="brand">
+            ▰ Company Name
+        </div>
+
+        <!-- Dashboard -->
+        <button class="nav-button active"
+                data-screen="dashboard"
+                onclick="showScreen('dashboard')">
+            ▦ Dashboard
         </button>
 
-        <!-- Team button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            My Team
+        <!-- Assignments -->
+        <button class="nav-button"
+                data-screen="assignments"
+                onclick="showScreen('assignments')">
+            ▤ Assignments
         </button>
 
-        <!-- Schedule button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Requests
+        <!-- My Team -->
+        <button class="nav-button"
+                data-screen="team"
+                onclick="showScreen('team')">
+            ▣ My Team
         </button>
 
-        <!-- Attendance button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Attendance
+        <!-- LOA Requests -->
+        <button class="nav-button"
+                data-screen="requests"
+                onclick="showScreen('requests')">
+            ▧ LOA Requests
         </button>
 
-        <!-- Performance Review button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Performance Review
+        <!-- Attendance -->
+        <button class="nav-button"
+                data-screen="attendance"
+                onclick="showScreen('attendance')">
+            ▦ Attendance
         </button>
 
-        <!-- Reports button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Reports
+        <!-- Performance Review -->
+        <button class="nav-button"
+                data-screen="performance"
+                onclick="showScreen('performance')">
+            ◕ Performance Review
         </button>
 
-        <!-- Chatbox button -->
-        <button style="background-color: red; color: white; font-size: 18px; width: 200px; margin-bottom: 5px;">
-            Chatbox
+        <!-- Reports -->
+        <button class="nav-button"
+                data-screen="reports"
+                onclick="showScreen('reports')">
+            ▤ Reports
         </button>
+
+        <!-- Chat -->
+        <button class="nav-button"
+                data-screen="chat"
+                onclick="showScreen('chat')">
+            ● Chat
+        </button>
+
+        <!-- Bottom Navigation -->
+        <div class="nav-bottom">
+
+            <div class="divider"></div>
+
+            <button class="nav-button"
+                    data-screen="profile"
+                    onclick="showScreen('profile')">
+                ♙ Profile
+            </button>
+
+            <button class="nav-button"
+                    data-screen="settings"
+                    onclick="showScreen('settings')">
+                ⚙ Settings
+            </button>
+
+            <button class="nav-button"
+                    onclick="window.location.href='index.html'">
+                ↪ Logout
+            </button>
+
+            <div class="divider"></div>
+
+            <button class="nav-button"
+                    data-screen="help"
+                    onclick="showScreen('help')">
+                ? Help & Support
+            </button>
+
+        </div>
 
     </div>
 
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <!-- TOP BAR -->
+        <div class="topbar">
+
+            <input class="search"
+                   type="search"
+                   placeholder="Search employees, schedules, reports, etc.">
+
+            <div class="account">
+                ☺ ▣
+            </div>
+
+        </div>
+
+
+        <!-- SCREEN 1: DASHBOARD -->
+        <section id="dashboard" class="screen active">
+
+            <h1>Welcome Back, Administrator!</h1>
+
+            <h2>Your Dashboard</h2>
+
+            <div class="cards">
+
+                <!-- Notifications -->
+                <div class="card">
+
+                    <h3>Notifications</h3>
+
+                    <div class="empty">
+                        No new notifications.
+                    </div>
+
+                </div>
+
+                <!-- Employee Attendance -->
+                <div class="card">
+
+                    <h3>Employee Attendance</h3>
+
+                    <div class="empty">
+                        Attendance data will appear here.
+                    </div>
+
+                    <br>
+
+                    <button class="red-button"
+                            onclick="showScreen('attendance')">
+                        See Details
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Reports Overview</h3>
+
+                <p>
+                    View company reports, employee statistics,
+                    attendance records, and performance summaries.
+                </p>
+
+                <button class="red-button"
+                        onclick="showScreen('reports')">
+                    View Reports
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 2: ASSIGNMENTS -->
+        <section id="assignments" class="screen">
+
+            <h1>Assignments</h1>
+
+            <div class="card">
+
+                <h3>Employee Assignments</h3>
+
+                <div class="empty">
+                    No assignments available.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 3: MY TEAM -->
+        <section id="team" class="screen">
+
+            <h1>My Team</h1>
+
+            <div class="card">
+
+                <h3>Employee Directory</h3>
+
+                <div class="empty">
+                    No employees have been added yet.
+                </div>
+
+                <br>
+
+                <button class="red-button"
+                        onclick="showScreen('employee-details')">
+                    View Employee Details Layout
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 4: EMPLOYEE DETAILS -->
+        <section id="employee-details" class="screen">
+
+            <h1>Employee Details</h1>
+
+            <button class="red-button"
+                    onclick="showScreen('team')">
+                Back to My Team
+            </button>
+
+            <br><br>
+
+            <div class="cards">
+
+                <!-- Employee Information -->
+                <div class="card">
+
+                    <h3>Employee Information</h3>
+
+                    <p>Name: --</p>
+                    <p>Department: --</p>
+                    <p>Work Type: --</p>
+                    <p>Birthday: --</p>
+                    <p>Email: --</p>
+                    <p>Phone Number: --</p>
+                    <p>Company Join Date: --</p>
+
+                    <hr>
+
+                    <h3>Today's Hours</h3>
+
+                    <p>Schedule not available.</p>
+
+                    <button class="red-button" disabled>
+                        View Schedule
+                    </button>
+
+                </div>
+
+                <!-- Task Progress -->
+                <div class="card">
+
+                    <h3>Task Progress</h3>
+
+                    <div class="progress">
+                        <div class="progress-fill"></div>
+                    </div>
+
+                    <h3>Task List</h3>
+
+                    <div class="empty">
+                        No tasks have been assigned.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 5: LOA REQUESTS -->
+        <section id="requests" class="screen">
+
+            <h1>LOA Requests</h1>
+
+            <div class="card">
+
+                <h3>Pending Leave Requests</h3>
+
+                <div class="empty">
+                    No leave of absence requests have been submitted.
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Request Details</h3>
+
+                <p>Employee: --</p>
+                <p>Date Received: --</p>
+                <p>Dates Requested Off: --</p>
+                <p>Reason: --</p>
+                <p>Previous LOA Requests: --</p>
+                <p>PTO Available: --</p>
+
+                <button class="red-button" disabled>
+                    Accept
+                </button>
+
+                <button class="red-button" disabled>
+                    Deny
+                </button>
+
+                <button class="red-button" disabled>
+                    Request More Information
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 6: ATTENDANCE -->
+        <section id="attendance" class="screen">
+
+            <h1>Attendance</h1>
+
+            <p id="attendance-date"></p>
+
+            <div class="stats">
+
+                <div class="stat">
+                    Present Today
+                    <strong>--</strong>
+                </div>
+
+                <div class="stat">
+                    Late / Tardy
+                    <strong>--</strong>
+                </div>
+
+                <div class="stat">
+                    On Leave
+                    <strong>--</strong>
+                </div>
+
+                <div class="stat">
+                    Overtime Hours
+                    <strong>--</strong>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Attendance Log: Today</h3>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Total Hours</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="6"
+                                    style="text-align:center;">
+                                    No attendance records available.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 7: PERFORMANCE REVIEW -->
+        <section id="performance" class="screen">
+
+            <h1>Performance Review</h1>
+
+            <h3>Current Review Cycle</h3>
+
+            <div class="stats">
+
+                <div class="stat">
+                    Pending Drafts
+                    <strong>0</strong>
+                </div>
+
+                <div class="stat">
+                    Team Average Rating
+                    <strong>--</strong>
+                </div>
+
+                <div class="stat">
+                    Review Cycle Progress
+                    <strong>--</strong>
+                </div>
+
+                <div class="stat">
+                    Goals Met Rate
+                    <strong>--</strong>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Evaluation Directory</h3>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Role</th>
+                                <th>Self Review</th>
+                                <th>Manager Review</th>
+                                <th>Final Rating</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="6"
+                                    style="text-align:center;">
+                                    No performance reviews available.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 8: REPORTS -->
+        <section id="reports" class="screen">
+
+            <h1>Reports</h1>
+
+            <p>
+                View and manage reports across the organization.
+            </p>
+
+            <!-- Report Statistics -->
+            <div class="stats">
+
+                <div class="stat">
+                    Total Employees
+                    <strong>0</strong>
+                </div>
+
+                <div class="stat">
+                    Active Assignments
+                    <strong>0</strong>
+                </div>
+
+                <div class="stat">
+                    Pending LOA Requests
+                    <strong>0</strong>
+                </div>
+
+                <div class="stat">
+                    Reports Generated
+                    <strong>0</strong>
+                </div>
+
+            </div>
+
+            <!-- Report Categories -->
+            <div class="report-grid">
+
+                <!-- Employee Reports -->
+                <div class="report-card">
+
+                    <h3>Employee Reports</h3>
+
+                    <p>
+                        View employee information, department
+                        breakdowns, and workforce summaries.
+                    </p>
+
+                    <div class="empty">
+                        No employee reports available.
+                    </div>
+
+                </div>
+
+                <!-- Attendance Reports -->
+                <div class="report-card">
+
+                    <h3>Attendance Reports</h3>
+
+                    <p>
+                        Review employee attendance, tardiness,
+                        absences, and overtime statistics.
+                    </p>
+
+                    <div class="empty">
+                        No attendance reports available.
+                    </div>
+
+                </div>
+
+                <!-- Performance Reports -->
+                <div class="report-card">
+
+                    <h3>Performance Reports</h3>
+
+                    <p>
+                        Review employee performance evaluations,
+                        assignment progress, and ratings.
+                    </p>
+
+                    <div class="empty">
+                        No performance reports available.
+                    </div>
+
+                </div>
+
+                <!-- Leave Reports -->
+                <div class="report-card">
+
+                    <h3>Leave of Absence Reports</h3>
+
+                    <p>
+                        Review leave requests, approvals,
+                        denials, and employee time off.
+                    </p>
+
+                    <div class="empty">
+                        No leave reports available.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Generated Reports</h3>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Report Name</th>
+                                <th>Report Type</th>
+                                <th>Date Generated</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="5"
+                                    style="text-align:center;">
+                                    No reports have been generated yet.
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SCREEN 9: CHAT -->
+        <section id="chat" class="screen">
+
+            <h1>Chat</h1>
+
+            <div class="chat-layout">
+
+                <!-- Conversations -->
+                <div class="card">
+
+                    <h3>Conversations</h3>
+
+                    <input class="search"
+                           type="search"
+                           placeholder="Search conversations">
+
+                    <br><br>
+
+                    <div class="empty">
+                        No conversations yet.
+                    </div>
+
+                </div>
+
+                <!-- Current Conversation -->
+                <div class="card chat-box">
+
+                    <h3>Current Conversation</h3>
+
+                    <hr>
+
+                    <div class="empty">
+                        Select a conversation to view messages.
+                    </div>
+
+                    <input class="chat-input"
+                           type="text"
+                           placeholder="Type a message..."
+                           disabled>
+
+                    <br><br>
+
+                    <button class="red-button" disabled>
+                        Send
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+        <section id="profile" class="screen">
+
+            <h1>My Profile</h1>
+
+            <div class="card">
+
+                <h3>Administrator Information</h3>
+
+                <p>Name: --</p>
+                <p>Email: --</p>
+                <p>Department: --</p>
+                <p>Position: Administrator</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+        <section id="settings" class="screen">
+
+            <h1>Settings</h1>
+
+            <div class="card">
+
+                <h3>Account Settings</h3>
+
+                <p>
+                    Account settings and preferences
+                    will appear here.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- HELP AND SUPPORT -->
+        <section id="help" class="screen">
+
+            <h1>Help & Support</h1>
+
+            <div class="card">
+
+                <h3>Need Assistance?</h3>
+
+                <p>
+                    Help and support information
+                    will be added here.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+    // Switch between administrator screens
+    function showScreen(screenId) {
+
+        // Hide all screens
+        let screens = document.querySelectorAll(".screen");
+
+        screens.forEach(function(screen) {
+            screen.classList.remove("active");
+        });
+
+        // Show selected screen
+        let selectedScreen = document.getElementById(screenId);
+
+        if (selectedScreen) {
+            selectedScreen.classList.add("active");
+        }
+
+        // Remove active styling from sidebar buttons
+        let buttons = document.querySelectorAll(".nav-button");
+
+        buttons.forEach(function(button) {
+            button.classList.remove("active");
+        });
+
+        // Highlight selected sidebar button
+        let selectedButton = document.querySelector(
+            '.nav-button[data-screen="' + screenId + '"]'
+        );
+
+        if (selectedButton) {
+            selectedButton.classList.add("active");
+        }
+
+    }
+
+
+    // Display current date on attendance page
+    let today = new Date();
+
+    document.getElementById("attendance-date").textContent =
+        today.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+
+</script>
+
 </body>
 </html>
-
