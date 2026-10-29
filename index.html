@@ -203,40 +203,6 @@
 </body>
 </html>
 
-<button type="reset" style="font-size: 20px; padding: 8px 16px; background-color: navy; color: white; border-radius: 12px; border: none;">
-    Clear
-</button>
-</form>
-
-    <h6 style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: navy">
-    Any problems please contact the IT Department: 555-555-5555
-</h6>
-
-    
-    <script>
-    document.querySelector("form").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        let username = document.getElementById("username").value;
-        let password = document.getElementById("password").value;
-
-        if (username === "admin" && password === "admin123") {
-            window.location.href = "administrator.html";
-        }
-        else if (username === "manager" && password === "manager123") {
-            window.location.href = "manager.html";
-        }
-        else if (username === "employee" && password === "employee123") {
-            window.location.href = "employee.html";
-        }
-        else {
-            alert("Invalid username or password.");
-        }
-    });
-    </script>
-
-</body>
-</html>
 
 
 
