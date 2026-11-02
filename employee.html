@@ -461,9 +461,9 @@
 
         <!-- TOP BAR -->
         <div class="topbar">
-
-            <h1>Welcome Back!</h1>
-
+<!--WELCOME BACK PROMPT TO CONTAIN USERNAME -->
+            
+<h1 id="welcome-message">Welcome Back!</h1>
             <input class="search"
                    type="search"
                    placeholder="Search assignments, schedule, etc.">
@@ -954,6 +954,14 @@
     // Initialize calendar
     renderCalendar();
 
+    // Get the logged-in user's username
+let username = localStorage.getItem("loggedInUser");
+
+// Display the username
+if (username) {
+    document.getElementById("welcome-message").textContent =
+        "Welcome Back, " + username + "!";
+}
 
     // Demonstration chat form
     document.getElementById("message-form").addEventListener(
@@ -966,7 +974,11 @@
                 "Message form completed. Sending is not connected yet.";
 
         }
+
+       
     );
+
+    
 
 </script>
 
