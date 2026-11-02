@@ -8,13 +8,15 @@
 
     <style>
 
-        /* Employee square buttons */
+        /*  buttons */
 .employee-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
+
+/* Employee  button */
 
 .employee-button {
     background: lightgreen;
@@ -27,6 +29,8 @@
     transition: 0.2s;
 }
 
+ /* Employee  button hovver*/
+
 .employee-button:hover {
     border-color: darkgreen;
     background: darkgreen;
@@ -38,22 +42,25 @@
     background: lightblue;
 }
 
+/* Manager button hover */
 .manager-button:hover {
     border-color: navy;
     background: skyblue;
 }
 
-/* Admin buttons */
+/* Admin button */
 .admin-button {
     border-color: darkorange;
     background: peachpuff;
 }
 
+/* Admin button hover */
 .admin-button:hover {
     border-color: darkred;
     background: lightsalmon;
 }
-        
+
+/*Inital design for employee */
 .employee-initials {
     background: linear-gradient(to right, #8be9a1, #397f4a);
     color: white;
@@ -88,7 +95,7 @@
     font-size: 13px;
 }
 
-        .employee-button .role-label {
+ .employee-button .role-label {
     display: block;
     font-size: 12px;
     margin-top: 5px;
@@ -489,16 +496,20 @@
 
             <div class="card">
 
-                <h3>Employee Directory</h3>
+ <h3>Employee Directory</h3>
 <div class="employee-grid">
 
+    
+<!-- Employee: Sophia Bennett Button -->
    <button class="employee-button" onclick="showEmployee(0)">
     <div class="employee-initials">SB</div>
     <strong>Sophia Bennett</strong>
     <span>Marketing</span>
     <span class="role-label">Employee</span>
 </button>
+    
 
+<!-- Employee: Olivia Mitchell Button -->
    <button class="employee-button" onclick="showEmployee(1)">
     <div class="employee-initials">OM</div>
     <strong>Olivia Mitchell</strong>
@@ -506,6 +517,9 @@
     <span class="role-label">Employee</span>
 </button>
 
+    
+
+<!-- Employee: Noah Williams Button -->
    <button class="employee-button" onclick="showEmployee(2)">
     <div class="employee-initials">NW</div>
     <strong>Noah Williams</strong>
@@ -513,13 +527,17 @@
     <span class="role-label">Employee</span>
 </button>
 
+    
+<!-- Employee: Isabella Garcia Button -->
    <button class="employee-button" onclick="showEmployee(3)">
     <div class="employee-initials">IG</div>
     <strong>Isabella Garcia</strong>
     <span>Sales</span>
     <span class="role-label">Employee</span>
 </button>
+    
 
+<!-- Employee: James Wilson Button -->
  <button class="employee-button" onclick="showEmployee(4)">
     <div class="employee-initials">JW</div>
     <strong>James Wilson</strong>
@@ -527,25 +545,33 @@
     <span class="role-label">Employee</span>
 </button>
 
+    
+<!-- Manager: Charlotte Davis Button -->
 <button class="employee-button manager-button" onclick="showEmployee(5)">
     <div class="employee-initials manager-initials">CD</div>
     <strong>Charlotte Davis</strong>
     <span class="role-label">Manager</span>
 </button>
 
+    
+<!-- Manager: Michael Smith Button -->
 <button class="employee-button manager-button" onclick="showEmployee(6)">
    <div class="employee-initials manager-initials">MS</div>
     <strong>Michael Smith</strong>
     <span class="role-label">Manager</span>
 </button>
-    
+
+
+<!-- Admin: Ethan Anderson Button -->
 <button class="employee-button admin-button" onclick="showEmployee(7)">
     <div class="employee-initials admin-initials">EA</div>
     <strong>Ethan Anderson</strong>
     <span>System Admin</span>
     <span class="role-label">Admin</span>
 </button>
+    
 
+<!-- Admin: Emma Carter Button -->
 <button class="employee-button admin-button" onclick="showEmployee(8)">
     <div class="employee-initials admin-initials">EC</div>
     <strong>Emma Carter</strong>
