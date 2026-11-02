@@ -28,11 +28,32 @@
 }
 
 .employee-button:hover {
-    border-color: #5bab70;
-    background: #f0fff3;
+    border-color: darkgreen;
+    background: lightgreen;
     transform: translateY(-3px);
 }
+/* Manager buttons */
+.manager-button {
+    border-color: darkblue;
+    background: lightblue;
+}
 
+.manager-button:hover {
+    border-color: navy;
+    background: skyblue;
+}
+
+/* Admin buttons */
+.admin-button {
+    border-color: darkorange;
+    background: peachpuff;
+}
+
+.admin-button:hover {
+    border-color: darkred;
+    background: lightsalmon;
+}
+        
 .employee-initials {
     background: linear-gradient(to right, #8be9a1, #397f4a);
     color: white;
@@ -56,6 +77,14 @@
     color: #777;
     font-size: 13px;
 }
+
+        .employee-button .role-label {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+} 
+        
         * {
             box-sizing: border-box;
         }
@@ -453,59 +482,65 @@
                 <h3>Employee Directory</h3>
 <div class="employee-grid">
 
-    <button class="employee-button" onclick="showEmployee(0)">
-        <div class="employee-initials">SB</div>
-        <strong>Sophia Bennet</strong>
-        <span>Marketing</span>
-    </button>
+   <button class="employee-button" onclick="showEmployee(0)">
+    <div class="employee-initials">SB</div>
+    <strong>Sophia Bennett</strong>
+    <span>Marketing</span>
+    <span class="role-label">Employee</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(1)">
-        <div class="employee-initials">OM</div>
-        <strong>Olivia Mitchell</strong>
-        <span>Accountant</span>
-    </button>
+   <button class="employee-button" onclick="showEmployee(1)">
+    <div class="employee-initials">OM</div>
+    <strong>Olivia Mitchell</strong>
+    <span>Accountant</span>
+    <span class="role-label">Employee</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(2)">
-        <div class="employee-initials">NW</div>
-        <strong>Noah Williams</strong>
-        <span>IT</span>
-    </button>
+   <button class="employee-button" onclick="showEmployee(2)">
+    <div class="employee-initials">NW</div>
+    <strong>Noah Williams</strong>
+    <span>IT</span>
+    <span class="role-label">Employee</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(3)">
-        <div class="employee-initials">IG</div>
-        <strong>Isabella Garcia</strong>
-        <span>Sales</span>
-    </button>
+   <button class="employee-button" onclick="showEmployee(3)">
+    <div class="employee-initials">IG</div>
+    <strong>Isabella Garcia</strong>
+    <span>Sales</span>
+    <span class="role-label">Employee</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(4)">
-        <div class="employee-initials">JW</div>
-        <strong>James Wilson</strong>
-        <span>Recruiter</span>
-    </button>
+ <button class="employee-button" onclick="showEmployee(4)">
+    <div class="employee-initials">JW</div>
+    <strong>James Wilson</strong>
+    <span>Recruiter</span>
+    <span class="role-label">Employee</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(5)">
-        <div class="employee-initials">CD</div>
-        <strong>Charlotte Davis</strong>
-        <span>Manager</span>
-    </button>
+<button class="employee-button manager-button" onclick="showEmployee(5)">
+    <div class="employee-initials">CD</div>
+    <strong>Charlotte Davis</strong>
+    <span class="role-label">Manager</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(6)">
-        <div class="employee-initials">MS</div>
-        <strong>Michael Smith</strong>
-        <span>Manager</span>
-    </button>
+<button class="employee-button manager-button" onclick="showEmployee(6)">
+    <div class="employee-initials">MS</div>
+    <strong>Michael Smith</strong>
+    <span class="role-label">Manager</span>
+</button>
+    
+<button class="employee-button admin-button" onclick="showEmployee(7)">
+    <div class="employee-initials">EA</div>
+    <strong>Ethan Anderson</strong>
+    <span>System Admin</span>
+    <span class="role-label">Admin</span>
+</button>
 
-    <button class="employee-button" onclick="showEmployee(7)">
-        <div class="employee-initials">EA</div>
-        <strong>Ethan Anderson</strong>
-        <span>System Admin</span>
-    </button>
-
-    <button class="employee-button" onclick="showEmployee(8)">
-        <div class="employee-initials">EC</div>
-        <strong>Emma Carter</strong>
-        <span>HR Admin</span>
-    </button>
+<button class="employee-button admin-button" onclick="showEmployee(8)">    <div class="employee-initials">EC</div>
+    <strong>Emma Carter</strong>
+    <span>HR</span>
+    <span class="role-label">Admin</span>
+</button>
 
 </div>
 
@@ -944,7 +979,7 @@
 
     const employees = [
     {
-        name: "Sophia Bennet",
+        name: "Sophia Bennett",
         dob: "03/14/1998",
         email: "sophia.bennett@tasksync.com",
         phone: "555-123-4567",
