@@ -68,6 +68,16 @@
     font-weight: bold;
 }
 
+/* Manager initials - purple fade */
+.manager-initials {
+    background: linear-gradient(to right, #d8b4fe, #7e22ce);
+}
+
+/* Admin initials - red fade */
+.admin-initials {
+    background: linear-gradient(to right, #fca5a5, #b91c1c);
+}
+
 .employee-button strong {
     display: block;
     margin-bottom: 6px;
@@ -518,31 +528,30 @@
 </button>
 
 <button class="employee-button manager-button" onclick="showEmployee(5)">
-    <div class="employee-initials">CD</div>
+    <div class="employee-initials manager-initials">CD</div>
     <strong>Charlotte Davis</strong>
     <span class="role-label">Manager</span>
 </button>
 
 <button class="employee-button manager-button" onclick="showEmployee(6)">
-    <div class="employee-initials">MS</div>
+   <div class="employee-initials manager-initials">MS</div>
     <strong>Michael Smith</strong>
     <span class="role-label">Manager</span>
 </button>
     
 <button class="employee-button admin-button" onclick="showEmployee(7)">
-    <div class="employee-initials">EA</div>
+    <div class="employee-initials admin-initials">EA</div>
     <strong>Ethan Anderson</strong>
     <span>System Admin</span>
     <span class="role-label">Admin</span>
 </button>
 
-<button class="employee-button admin-button" onclick="showEmployee(8)">    <div class="employee-initials">EC</div>
+<button class="employee-button admin-button" onclick="showEmployee(8)">
+    <div class="employee-initials admin-initials">EC</div>
     <strong>Emma Carter</strong>
     <span>HR</span>
     <span class="role-label">Admin</span>
 </button>
-
-</div>
 
                 <br>
 
