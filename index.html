@@ -163,89 +163,72 @@
 
 
     <!-- Login Navigation -->
-    <script>
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
 
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
 
-            event.preventDefault();
+        if (username === "admin" && password === "admin123") {
+            window.location.href = "administrator.html";
+        }
 
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
+        else if (username === "manager" && password === "manager123") {
+            window.location.href = "manager.html";
+        }
 
-            if (username === "admin" && password === "admin123") {
+        else if (username === "employee" && password === "employee123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-                window.location.href = "administrator.html";
+        else if (username === "CharlotteDavis" && password === "charlottedavis246") {
+            window.location.href = "manager.html";
+        }
 
-                 }
+        else if (username === "MichaelSmith" && password === "michaelsmith246") {
+            window.location.href = "manager.html";
+        }
 
-                else if (username === "manager" && password === "manager123") {
+        else if (username === "EthanAnderson" && password === "ethananderson157") {
+            window.location.href = "administrator.html";
+        }
 
-                window.location.href = "manager.html";
+        else if (username === "EmmaCarter" && password === "emmacarter157") {
+            window.location.href = "administrator.html";
+        }
 
-                }
+        else if (username === "SophiaBennett" && password === "sophiabennett123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-                 else if (username === "employee" && password === "employee123") {
+        else if (username === "OliviaMitchell" && password === "oliviamitchell123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-                window.location.href = "manager.html";
-            
-            
-            
-            }
+        else if (username === "NoahWilliams" && password === "noahwilliams123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-            else if (username === "CharlotteDavis" && password === "charlottedavis246") {
+        else if (username === "IsabellaGarcia" && password === "isabellagarcia123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-                window.location.href = "manager.html";
-            
-            }
-                
-            else if (username === "MichaelSmith" && password === "michaelsmith246") {
+        else if (username === "JamesWilson" && password === "jameswilson123") {
+            localStorage.setItem("loggedInUser", username);
+            window.location.href = "employee.html";
+        }
 
-                window.location.href = "manager.html";
-
-            }
-                 else if (username === "EthanAnderson" && password === "ethananderson157") {
-
-                window.location.href = "administrator.html";
-
-            }
-                else if (username === "EmmaCarter" && password === "emmacarter157") {
-
-                window.location.href = "administrator.html";
-         
-
-            }
-                else if (username === "SophiaBennett" && password === "sophiabennett123") {
-                      window.location.href = "employee.html";
-                }
-
-            
-        
-                else if (username === "OliviaMitchell" && password === "oliviamitchell123") {
-                      window.location.href = "employee.html";
-                }
-        
-
-                else if (username === "NoahWilliams" && password === "noahwilliams123") {
-                      window.location.href = "employee.html";
-                }
-                    
-                else if (username === "IsabellaGarcia" && password === "isabellagarcia123") {
-                      window.location.href = "employee.html";
-                }
-
-                    else if (username === "JamesWilson" && password === "jameswilson123") {
-                      window.location.href = "employee.html";
-                }
-                        
-            else {
-
-                alert("Invalid username or password.");
-
-            }
-
-        });
-
-    </script>
+        else {
+            alert("Invalid username or password.");
+        }
+    });
+</script>
 
 </body>
 </html>
