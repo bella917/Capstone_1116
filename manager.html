@@ -7,6 +7,55 @@
     <title>Manager Page</title>
 
     <style>
+
+        /* Employee square buttons */
+.employee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.employee-button {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 20px 10px;
+    min-height: 150px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.employee-button:hover {
+    border-color: #5bab70;
+    background: #f0fff3;
+    transform: translateY(-3px);
+}
+
+.employee-initials {
+    background: linear-gradient(to right, #8be9a1, #397f4a);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.employee-button strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.employee-button span {
+    color: #777;
+    font-size: 13px;
+}
         * {
             box-sizing: border-box;
         }
