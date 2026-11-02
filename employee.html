@@ -954,7 +954,7 @@
     // Initialize calendar
     renderCalendar();
 
-    // Get the logged-in user's username
+// Get the username saved during login
 let username = localStorage.getItem("loggedInUser");
 
 // Display the username
@@ -962,6 +962,7 @@ if (username) {
     document.getElementById("welcome-message").textContent =
         "Welcome Back, " + username + "!";
 }
+
 
     // Demonstration chat form
     document.getElementById("message-form").addEventListener(
