@@ -451,10 +451,63 @@
             <div class="card">
 
                 <h3>Employee Directory</h3>
+<div class="employee-grid">
 
-                <div class="empty">
-                    No employees have been added yet.
-                </div>
+    <button class="employee-button" onclick="showEmployee(0)">
+        <div class="employee-initials">SB</div>
+        <strong>Sophia Bennet</strong>
+        <span>Marketing</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(1)">
+        <div class="employee-initials">OM</div>
+        <strong>Olivia Mitchell</strong>
+        <span>Accountant</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(2)">
+        <div class="employee-initials">NW</div>
+        <strong>Noah Williams</strong>
+        <span>IT</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(3)">
+        <div class="employee-initials">IG</div>
+        <strong>Isabella Garcia</strong>
+        <span>Sales</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(4)">
+        <div class="employee-initials">JW</div>
+        <strong>James Wilson</strong>
+        <span>Recruiter</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(5)">
+        <div class="employee-initials">CD</div>
+        <strong>Charlotte Davis</strong>
+        <span>Manager</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(6)">
+        <div class="employee-initials">MS</div>
+        <strong>Michael Smith</strong>
+        <span>Manager</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(7)">
+        <div class="employee-initials">EA</div>
+        <strong>Ethan Anderson</strong>
+        <span>System Admin</span>
+    </button>
+
+    <button class="employee-button" onclick="showEmployee(8)">
+        <div class="employee-initials">EC</div>
+        <strong>Emma Carter</strong>
+        <span>HR Admin</span>
+    </button>
+
+</div>
 
                 <br>
 
@@ -888,6 +941,111 @@
             month: "long",
             day: "numeric"
         });
+
+    const employees = [
+    {
+        name: "Sophia Bennet",
+        dob: "03/14/1998",
+        email: "sophia.bennett@tasksync.com",
+        phone: "555-123-4567",
+        role: "Marketing",
+        startDate: "01/15/2024"
+    },
+    {
+        name: "Olivia Mitchell",
+        dob: "07/22/2001",
+        email: "olivia.mitchell@tasksync.com",
+        phone: "555-246-2812",
+        role: "Accountant",
+        startDate: "03/04/2024"
+    },
+    {
+        name: "Noah Williams",
+        dob: "06/12/1987",
+        email: "noah.williams@tasksync.com",
+        phone: "555-987-5431",
+        role: "IT",
+        startDate: "08/19/2022"
+    },
+    {
+        name: "Isabella Garcia",
+        dob: "05/13/1980",
+        email: "isabella.garcia@tasksync.com",
+        phone: "555-472-9223",
+        role: "Sales",
+        startDate: "06/12/2023"
+    },
+    {
+        name: "James Wilson",
+        dob: "02/27/1999",
+        email: "james.wilson@tasksync.com",
+        phone: "555-213-0442",
+        role: "Recruiter",
+        startDate: "09/09/2024"
+    },
+    {
+        name: "Charlotte Davis",
+        dob: "08/20/1990",
+        email: "charlotte.davis@tasksync.com",
+        phone: "555-542-4542",
+        role: "Manager",
+        startDate: "02/01/2021"
+    },
+    {
+        name: "Michael Smith",
+        dob: "07/01/2002",
+        email: "michael.smith@tasksync.com",
+        phone: "555-364-3244",
+        role: "Manager",
+        startDate: "07/10/2023"
+    },
+    {
+        name: "Ethan Anderson",
+        dob: "04/03/2001",
+        email: "ethan.anderson@tasksync.com",
+        phone: "555-3432-3432",
+        role: "System Admin",
+        startDate: "11/06/2023"
+    },
+    {
+        name: "Emma Carter",
+        dob: "04/20/2002",
+        email: "emma.carter@tasksync.com",
+        phone: "555-3423-3432",
+        role: "HR Admin",
+        startDate: "05/20/2024"
+    }
+];
+
+function showEmployee(index) {
+    const employee = employees[index];
+
+    showScreen('employee-details');
+
+    const details = document.querySelector(
+        "#employee-details .card"
+    );
+
+    details.innerHTML = `
+        <h3>Employee Information</h3>
+
+        <p><strong>Name:</strong> ${employee.name}</p>
+        <p><strong>Role:</strong> ${employee.role}</p>
+        <p><strong>Date of Birth:</strong> ${employee.dob}</p>
+        <p><strong>Email:</strong> ${employee.email}</p>
+        <p><strong>Phone Number:</strong> ${employee.phone}</p>
+        <p><strong>Company Join Date:</strong> ${employee.startDate}</p>
+
+        <hr>
+
+        <h3>Today's Hours</h3>
+        <p>Schedule not available.</p>
+
+        <button class="green-button">
+            View Schedule
+        </button>
+    `;
+}
 
 </script>
 
