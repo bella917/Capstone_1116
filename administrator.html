@@ -8,6 +8,99 @@
     <title>Administrator Page</title>
 
     <style>
+        /*  buttons */
+.employee-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Employee  button */
+
+.employee-button {
+    background: lightgreen;
+    border: 1px solid darkgreen;
+    border-radius: 12px;
+    padding: 20px 10px;
+    min-height: 150px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+ /* Employee  button hovver*/
+
+.employee-button:hover {
+    border-color: darkgreen;
+    background: darkgreen;
+    transform: translateY(-3px);
+}
+/* Manager buttons */
+.manager-button {
+    border-color: darkblue;
+    background: lightblue;
+}
+
+/* Manager button hover */
+.manager-button:hover {
+    border-color: navy;
+    background: skyblue;
+}
+
+/* Admin button */
+.admin-button {
+    border-color: darkorange;
+    background: peachpuff;
+}
+
+/* Admin button hover */
+.admin-button:hover {
+    border-color: darkred;
+    background: lightsalmon;
+}
+
+/*Inital design for employee */
+.employee-initials {
+    background: linear-gradient(to right, #8be9a1, #397f4a);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Manager initials - purple fade */
+.manager-initials {
+    background: linear-gradient(to right, #d8b4fe, #7e22ce);
+}
+
+/* Admin initials - red fade */
+.admin-initials {
+    background: linear-gradient(to right, #fca5a5, #b91c1c);
+}
+
+.employee-button strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.employee-button span {
+    color: #777;
+    font-size: 13px;
+}
+
+ .employee-button .role-label {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+} 
         * {
             box-sizing: border-box;
         }
@@ -503,10 +596,88 @@
 
                 <h3>Employee Directory</h3>
 
-                <div class="empty">
-                    No employees have been added yet.
-                </div>
+<div class="employee-grid">
 
+    
+<!-- Employee: Sophia Bennett Button -->
+   <button class="employee-button" onclick="showEmployee(0)">
+    <div class="employee-initials">SB</div>
+    <strong>Sophia Bennett</strong>
+    <span>Marketing</span>
+    <span class="role-label">Employee</span>
+</button>
+    
+
+<!-- Employee: Olivia Mitchell Button -->
+   <button class="employee-button" onclick="showEmployee(1)">
+    <div class="employee-initials">OM</div>
+    <strong>Olivia Mitchell</strong>
+    <span>Accountant</span>
+    <span class="role-label">Employee</span>
+</button>
+
+    
+
+<!-- Employee: Noah Williams Button -->
+   <button class="employee-button" onclick="showEmployee(2)">
+    <div class="employee-initials">NW</div>
+    <strong>Noah Williams</strong>
+    <span>IT</span>
+    <span class="role-label">Employee</span>
+</button>
+
+    
+<!-- Employee: Isabella Garcia Button -->
+   <button class="employee-button" onclick="showEmployee(3)">
+    <div class="employee-initials">IG</div>
+    <strong>Isabella Garcia</strong>
+    <span>Sales</span>
+    <span class="role-label">Employee</span>
+</button>
+    
+
+<!-- Employee: James Wilson Button -->
+ <button class="employee-button" onclick="showEmployee(4)">
+    <div class="employee-initials">JW</div>
+    <strong>James Wilson</strong>
+    <span>Recruiter</span>
+    <span class="role-label">Employee</span>
+</button>
+
+    
+<!-- Manager: Charlotte Davis Button -->
+<button class="employee-button manager-button" onclick="showEmployee(5)">
+    <div class="employee-initials manager-initials">CD</div>
+    <strong>Charlotte Davis</strong>
+    <span class="role-label">Manager</span>
+</button>
+
+    
+<!-- Manager: Michael Smith Button -->
+<button class="employee-button manager-button" onclick="showEmployee(6)">
+   <div class="employee-initials manager-initials">MS</div>
+    <strong>Michael Smith</strong>
+    <span class="role-label">Manager</span>
+</button>
+
+
+<!-- Admin: Ethan Anderson Button -->
+<button class="employee-button admin-button" onclick="showEmployee(7)">
+    <div class="employee-initials admin-initials">EA</div>
+    <strong>Ethan Anderson</strong>
+    <span>System Admin</span>
+    <span class="role-label">Admin</span>
+</button>
+    
+
+<!-- Admin: Emma Carter Button -->
+<button class="employee-button admin-button" onclick="showEmployee(8)">
+    <div class="employee-initials admin-initials">EC</div>
+    <strong>Emma Carter</strong>
+    <span>HR</span>
+    <span class="role-label">Admin</span>
+</button>
+</div>
                 <br>
 
                 <button class="red-button"
@@ -1060,7 +1231,112 @@
             month: "long",
             day: "numeric"
         });
+    /* Employee Data*/
+    const employees = [
+    {
+        name: "Sophia Bennett",
+        dob: "03/14/1998",
+        email: "sophia.bennett@tasksync.com",
+        phone: "555-123-4567",
+        role: "Marketing",
+        startDate: "01/15/2024"
+    },
+    {
+        name: "Olivia Mitchell",
+        dob: "07/22/2001",
+        email: "olivia.mitchell@tasksync.com",
+        phone: "555-246-2812",
+        role: "Accountant",
+        startDate: "03/04/2024"
+    },
+    {
+        name: "Noah Williams",
+        dob: "06/12/1987",
+        email: "noah.williams@tasksync.com",
+        phone: "555-987-5431",
+        role: "IT",
+        startDate: "08/19/2022"
+    },
+    {
+        name: "Isabella Garcia",
+        dob: "05/13/1980",
+        email: "isabella.garcia@tasksync.com",
+        phone: "555-472-9223",
+        role: "Sales",
+        startDate: "06/12/2023"
+    },
+    {
+        name: "James Wilson",
+        dob: "02/27/1999",
+        email: "james.wilson@tasksync.com",
+        phone: "555-213-0442",
+        role: "Recruiter",
+        startDate: "09/09/2024"
+    },
+    {
+        name: "Charlotte Davis",
+        dob: "08/20/1990",
+        email: "charlotte.davis@tasksync.com",
+        phone: "555-542-4542",
+        role: "Manager",
+        startDate: "02/01/2021"
+    },
+    {
+        name: "Michael Smith",
+        dob: "07/01/2002",
+        email: "michael.smith@tasksync.com",
+        phone: "555-364-3244",
+        role: "Manager",
+        startDate: "07/10/2023"
+    },
+    {
+        name: "Ethan Anderson",
+        dob: "04/03/2001",
+        email: "ethan.anderson@tasksync.com",
+        phone: "555-3432-3432",
+        role: "System Admin",
+        startDate: "11/06/2023"
+    },
+    {
+        name: "Emma Carter",
+        dob: "04/20/2002",
+        email: "emma.carter@tasksync.com",
+        phone: "555-3423-3432",
+        role: "HR Admin",
+        startDate: "05/20/2024"
+    }
+];
 
+    /*Employee Information */
+function showEmployee(index) {
+    const employee = employees[index];
+
+    showScreen('employee-details');
+
+    const details = document.querySelector(
+        "#employee-details .card"
+    );
+
+    details.innerHTML = `
+        <h3>Employee Information</h3>
+
+        <p><strong>Name:</strong> ${employee.name}</p>
+        <p><strong>Role:</strong> ${employee.role}</p>
+        <p><strong>Date of Birth:</strong> ${employee.dob}</p>
+        <p><strong>Email:</strong> ${employee.email}</p>
+        <p><strong>Phone Number:</strong> ${employee.phone}</p>
+        <p><strong>Company Join Date:</strong> ${employee.startDate}</p>
+
+        <hr>
+
+        <h3>Today's Hours</h3>
+        <p>Schedule not available.</p>
+
+       <button class="red-button" disabled>
+            View Schedule
+        </button>
+    `;
+}
 </script>
 
 </body>
