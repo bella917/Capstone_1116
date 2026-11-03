@@ -7,11 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Page</title>
 
+    <!--formatting style for whole page -->
     <style>
         * {
             box-sizing: border-box;
         }
 
+    
+        /*text style for whole page */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -19,6 +22,8 @@
             color: #242833;
         }
 
+        
+        /*layout for whole page */
         .layout {
             display: flex;
             min-height: 100vh;
@@ -35,6 +40,7 @@
             flex-direction: column;
         }
 
+        /*Styles company brand name in task bar*/
         .brand {
             color: #a678f4;
             font-size: 21px;
@@ -43,6 +49,7 @@
             padding-left: 10px;
         }
 
+        /*nav bar formatting */
         .nav-button {
             display: block;
             width: 100%;
@@ -57,6 +64,7 @@
             cursor: pointer;
         }
 
+         /*nav bar hovering function */
         .nav-button:hover,
         .nav-button.active {
             background: linear-gradient(to right, #9857f5, #39206b);
@@ -673,6 +681,7 @@
 
                 <p>Overall Progress: 0%</p>
 
+                  <!--progress bar -->
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
@@ -702,10 +711,12 @@
 
             <div class="message-form">
 
+                <!--Message form title-->
                 <h2>Send a Message Here</h2>
 
                 <form id="message-form">
 
+                    <!--Sender name textbox-->
                     <label for="sender-name">
                         Your Name
                     </label>
@@ -716,6 +727,7 @@
                         placeholder="Enter your name"
                            required>
 
+                     <!--Sender email textbox-->
                     <label for="sender-email">
                         Your Email
                     </label>
@@ -726,6 +738,7 @@
                         placeholder="Enter your email"
                            required>
 
+                     <!--recipient email textbox-->
                     <label for="recipient-email">
                         Recipient Email
                     </label>
@@ -736,6 +749,7 @@
                         placeholder="Enter recipient email"
                            required>
 
+                    <!--message textbox-->
                     <label for="message">
                         Message
                     </label>
@@ -946,6 +960,7 @@
     // Previous / next month
     function changeMonth(amount) {
 
+        //date setting functions
         currentDate.setDate(1);
         currentDate.setMonth(
             currentDate.getMonth() + amount
@@ -961,7 +976,7 @@
 // Get the username saved during login
 let username = localStorage.getItem("loggedInUser");
 
-// Display the username
+// Display the username at top of screen
 if (username) {
     document.getElementById("welcome-message").textContent =
         "Welcome Back, " + username + "!";
@@ -976,7 +991,7 @@ if (username) {
             event.preventDefault();
 
             document.getElementById("message-status").textContent =
-                "Message form completed. Sending is not connected yet.";
+                "Message form completed.";
 
         }
 
