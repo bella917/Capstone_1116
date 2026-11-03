@@ -513,8 +513,8 @@
         <!-- SCREEN 1: DASHBOARD -->
         <section id="dashboard" class="screen active">
 
-            <h1>Welcome Back, Administrator!</h1>
-
+<h1 id="welcome-message">Welcome Back!</h1>
+            
             <h2>Your Dashboard</h2>
 
             <div class="cards">
@@ -1337,6 +1337,14 @@ function showEmployee(index) {
         </button>
     `;
 }
+
+
+    //welcome back message
+    // Display the logged-in administrator's username
+const username = localStorage.getItem("loggedInUser");
+
+document.getElementById("welcome-message").textContent =
+    "Welcome Back, " + username + "!";
 </script>
 
 </body>
