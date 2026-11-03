@@ -1,0 +1,346 @@
+{
+  "users": [
+    {
+      "id": "u-admin",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "name": "Alex Morgan",
+      "email": "admin@tasksync.com",
+      "phone": "555-010-1000",
+      "department": "Operations & HR",
+      "position": "Administrator",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "1986-04-12",
+      "joinDate": "2020-01-15",
+      "ptoAvailable": 20,
+      "shift": "08:30 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-manager",
+      "username": "manager",
+      "password": "manager123",
+      "role": "manager",
+      "name": "Jordan Taylor",
+      "email": "manager@tasksync.com",
+      "phone": "555-010-2000",
+      "department": "Engineering",
+      "position": "Engineering Manager",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "1989-08-22",
+      "joinDate": "2021-03-10",
+      "ptoAvailable": 18,
+      "shift": "09:00 AM - 05:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp1",
+      "username": "employee",
+      "password": "employee123",
+      "role": "employee",
+      "name": "Taylor Reed",
+      "email": "employee@tasksync.com",
+      "phone": "555-010-3001",
+      "department": "Engineering",
+      "position": "Software Developer",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "1996-11-05",
+      "joinDate": "2023-06-01",
+      "ptoAvailable": 14,
+      "shift": "09:00 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp2",
+      "username": "schen",
+      "password": "password123",
+      "role": "employee",
+      "name": "Samira Chen",
+      "email": "schen@tasksync.com",
+      "phone": "555-010-3002",
+      "department": "Product Design",
+      "position": "UX Designer",
+      "workType": "Full-Time (Remote)",
+      "birthday": "1994-02-19",
+      "joinDate": "2022-09-12",
+      "ptoAvailable": 12,
+      "shift": "09:30 AM - 05:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp3",
+      "username": "mross",
+      "password": "password123",
+      "role": "employee",
+      "name": "Marcus Ross",
+      "email": "mross@tasksync.com",
+      "phone": "555-010-3003",
+      "department": "Quality Assurance",
+      "position": "QA Analyst",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "1998-07-30",
+      "joinDate": "2024-01-20",
+      "ptoAvailable": 10,
+      "shift": "08:00 AM - 04:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "id": "asg-1",
+      "title": "Q4 API Security Audit",
+      "description": "Review authentication endpoints and session validation rules.",
+      "employeeId": "u-emp1",
+      "assignedBy": "Jordan Taylor",
+      "dueDate": "2026-11-15",
+      "priority": "High",
+      "progress": 65,
+      "status": "In Progress",
+      "createdAt": "2026-11-03"
+    },
+    {
+      "id": "asg-2",
+      "title": "Update Onboarding Documentation",
+      "description": "Standardize setup instructions for new engineering hires.",
+      "employeeId": "u-emp1",
+      "assignedBy": "Jordan Taylor",
+      "dueDate": "2026-11-10",
+      "priority": "Medium",
+      "progress": 100,
+      "status": "Completed",
+      "createdAt": "2026-11-03"
+    },
+    {
+      "id": "asg-3",
+      "title": "Mobile Dashboard Wireframes",
+      "description": "Deliver responsive component specs for the employee portal.",
+      "employeeId": "u-emp2",
+      "assignedBy": "Jordan Taylor",
+      "dueDate": "2026-11-18",
+      "priority": "High",
+      "progress": 40,
+      "status": "In Progress",
+      "createdAt": "2026-11-03"
+    },
+    {
+      "id": "asg-4",
+      "title": "Automated Regression Suite",
+      "description": "Add end-to-end tests for attendance and schedule modules.",
+      "employeeId": "u-emp3",
+      "assignedBy": "Alex Morgan",
+      "dueDate": "2026-11-22",
+      "priority": "Medium",
+      "progress": 20,
+      "status": "In Progress",
+      "createdAt": "2026-11-03"
+    }
+  ],
+  "schedules": [
+    {
+      "id": "sch-1",
+      "employeeId": "u-emp1",
+      "date": "2026-11-03",
+      "shift": "09:00 AM - 05:00 PM",
+      "note": "Core Sprint Development & Daily Standup"
+    },
+    {
+      "id": "sch-2",
+      "employeeId": "u-emp2",
+      "date": "2026-11-03",
+      "shift": "09:30 AM - 05:30 PM",
+      "note": "UX Design Review Session"
+    },
+    {
+      "id": "sch-3",
+      "employeeId": "u-emp3",
+      "date": "2026-11-03",
+      "shift": "08:00 AM - 04:30 PM",
+      "note": "Release Candidate Testing"
+    }
+  ],
+  "loaRequests": [
+    {
+      "id": "loa-1",
+      "employeeId": "u-emp1",
+      "dateReceived": "2026-11-03",
+      "startDate": "2026-11-24",
+      "endDate": "2026-11-26",
+      "daysRequested": 3,
+      "reason": "Family holiday travel out of state.",
+      "previousRequests": 1,
+      "status": "Pending",
+      "managerNote": ""
+    },
+    {
+      "id": "loa-2",
+      "employeeId": "u-emp2",
+      "dateReceived": "2026-11-03",
+      "startDate": "2026-12-03",
+      "endDate": "2026-12-04",
+      "daysRequested": 2,
+      "reason": "Medical appointment and recovery day.",
+      "previousRequests": 0,
+      "status": "Pending",
+      "managerNote": ""
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att-1",
+      "employeeId": "u-emp1",
+      "date": "2026-11-03",
+      "clockIn": "05:29 PM",
+      "clockOut": "--",
+      "totalHours": 8,
+      "overtimeHours": 0.25,
+      "status": "Present"
+    },
+    {
+      "id": "att-2",
+      "employeeId": "u-emp2",
+      "date": "2026-11-03",
+      "clockIn": "05:29 PM",
+      "clockOut": "--",
+      "totalHours": 8,
+      "overtimeHours": 0,
+      "status": "Present"
+    },
+    {
+      "id": "att-3",
+      "employeeId": "u-emp3",
+      "date": "2026-11-03",
+      "clockIn": "07:58 AM",
+      "clockOut": "05:30 PM",
+      "totalHours": 9.5,
+      "overtimeHours": 1.5,
+      "status": "Present"
+    }
+  ],
+  "performanceReviews": [
+    {
+      "id": "perf-1",
+      "employeeId": "u-emp1",
+      "cycle": "Q4 2026",
+      "selfReview": "Completed (4.5/5) - Delivered API enhancements and docs ahead of schedule.",
+      "managerReview": "Completed - Strong technical execution and mentorship.",
+      "finalRating": 4.6,
+      "goalsMetRate": 92,
+      "status": "Completed"
+    },
+    {
+      "id": "perf-2",
+      "employeeId": "u-emp2",
+      "cycle": "Q4 2026",
+      "selfReview": "Completed (4.3/5) - Redesigned core navigation and component library.",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 85,
+      "status": "Pending Draft"
+    },
+    {
+      "id": "perf-3",
+      "employeeId": "u-emp3",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 78,
+      "status": "Pending Draft"
+    }
+  ],
+  "reports": [
+    {
+      "id": "rep-1",
+      "name": "Workforce Directory & Department Breakdown",
+      "type": "Employee Report",
+      "dateGenerated": "2026-11-03",
+      "status": "Completed",
+      "summary": "3 Active Employees, 1 Manager, 1 Admin across 4 departments."
+    },
+    {
+      "id": "rep-2",
+      "name": "Daily Attendance & Overtime Summary",
+      "type": "Attendance Report",
+      "dateGenerated": "2026-11-03",
+      "status": "Completed",
+      "summary": "2 Present on time, 1 Late/Tardy, 1.75 Total Overtime Hours."
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-1",
+      "senderId": "u-manager",
+      "senderName": "Jordan Taylor",
+      "senderEmail": "manager@tasksync.com",
+      "recipientId": "u-emp1",
+      "recipientName": "Taylor Reed",
+      "recipientEmail": "employee@tasksync.com",
+      "text": "Hi Taylor, great progress on the onboarding documentation! Let me know if you need anything for the Q4 API audit.",
+      "timestamp": "2026-11-03T13:30:00.000Z"
+    },
+    {
+      "id": "msg-2",
+      "senderId": "u-emp1",
+      "senderName": "Taylor Reed",
+      "senderEmail": "employee@tasksync.com",
+      "recipientId": "u-manager",
+      "recipientName": "Jordan Taylor",
+      "recipientEmail": "manager@tasksync.com",
+      "text": "Thanks Jordan! I am 65% through the API audit and on track for the due date.",
+      "timestamp": "2026-11-03T14:15:00.000Z"
+    },
+    {
+      "id": "msg-3",
+      "senderId": "u-admin",
+      "senderName": "Alex Morgan",
+      "senderEmail": "admin@tasksync.com",
+      "recipientId": "u-manager",
+      "recipientName": "Jordan Taylor",
+      "recipientEmail": "manager@tasksync.com",
+      "text": "Hi Jordan, please review the pending Q4 performance drafts and LOA requests by Friday.",
+      "timestamp": "2026-11-03T15:00:00.000Z"
+    },
+    {
+      "id": "msg-1793744987185",
+      "senderId": "u-admin",
+      "senderName": "Alex Morgan",
+      "senderEmail": "admin@tasksync.com",
+      "recipientId": "u-emp1",
+      "recipientName": "Taylor Reed",
+      "recipientEmail": "employee@tasksync.com",
+      "text": "dfds",
+      "timestamp": "2026-11-03T22:29:47.185Z"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "tasksync-employee-management-system",
+  "version": "1.0.0",
+  "description": "TaskSync Node.js Employee Management System (No Payroll)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
