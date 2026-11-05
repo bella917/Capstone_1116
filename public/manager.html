@@ -384,11 +384,7 @@ Creates a white box to organize related content. */
 
             <input class="search"
                    type="search"
-                   placeholder="Search employees, schedules, etc.">
-
-            <div class="account">
-                ☺ ▣
-            </div>
+                   placeholder="Search employees, schedules, etc.">   <!--  placeholder text  -->
 
         </div>
 
@@ -396,9 +392,11 @@ Creates a white box to organize related content. */
         <!-- SCREEN 1: DASHBOARD -->
         <section id="dashboard" class="screen active">
 
-            <h1>Welcome Back, Manager!</h1>
+            <h1>Welcome Back, Manager!</h1> <!-- welcome back message  --> 
 
-            <h2>Your Dashboard</h2>
+        </div>
+ 
+            <h2>Your Dashboard</h2> <!--  dashboard sectioning -->
 
             <div class="cards">
 
@@ -416,16 +414,18 @@ Creates a white box to organize related content. */
                 <!-- Employee Attendance -->
                 <div class="card">
 
-                    <h3>Employee Attendance</h3>
+                    <h3>Employee Attendance</h3> <!--  heading  -->
 
                     <div class="empty">
                         Attendance data will appear here.
                     </div>
 
                     <br>
+                
+                    <!-- Button that opens the attendance screen -->
 
-                    <button class="green-button"
-                            onclick="showScreen('attendance')">
+                    <button class="green-button" 
+                            onclick="showScreen('attendance')"> 
                         See Details
                     </button>
 
@@ -443,6 +443,9 @@ Creates a white box to organize related content. */
 
             <div class="card">
 
+                
+                    <!-- Button that opens the employee directory screen -->
+
                 <h3>Employee Directory</h3>
 
                 <div class="empty">
@@ -451,8 +454,11 @@ Creates a white box to organize related content. */
 
                 <br>
 
+                
                 <button class="green-button"
-                        onclick="showScreen('employee-details')">
+                        onclick="showScreen('employee-details')"> 
+                    <!-- Button that opens the view employe details screes -->
+
                     View Employee Details Layout
                 </button>
 
