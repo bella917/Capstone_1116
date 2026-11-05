@@ -13,15 +13,15 @@
 
         /* formatting */
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f5f7;
-            color: #242833;
+            margin: 0; /*margins*/
+            font-family: Arial, sans-serif; /*font*/
+            background-color: #f4f5f7; /* light gray background color */
+            color: #242833; /* dark blue-gray background color */
         }
 
         /*assigns layour for entire page*/
         .layout {
-            display: flex;
+            display: flex; /* arranges elements inside a container */
             min-height: 100vh;
         }
 
@@ -473,7 +473,7 @@ Creates a white box to organize related content. */
             <h1>My Team - Employee Details</h1>
 
             <button class="green-button"
-                    onclick="showScreen('team')">
+                    onclick="showScreen('team')"> <!-- Will display team when selected -->
                 Back to My Team
             </button>
 
@@ -500,7 +500,7 @@ Creates a white box to organize related content. */
 
                     <p>Schedule not available.</p>
 
-                    <button class="green-button">
+                    <button class="green-button"> <!-- will display employee schedule when clicked -->
                         View Schedule
                     </button>
 
@@ -509,15 +509,16 @@ Creates a white box to organize related content. */
                 <!-- Task Progress -->
                 <div class="card">
 
-                    <h3>Task Progress</h3>
+                    <!-- Task progress section -->
+                    <h3>Task Progress</h3> 
 
                     <div class="progress">
-                        <div class="progress-fill"></div>
+                        <div class="progress-fill"></div> <!--formats task progress bar-->
                     </div>
 
-                    <h3>Task List</h3>
+                    <h3>Task List</h3> <!--employee task list section -->
 
-                    <div class="empty">
+                    <div class="empty"> <!-- what display when section is empty -->
                         No tasks have been assigned.
                     </div>
 
@@ -531,13 +532,13 @@ Creates a white box to organize related content. */
         <!-- SCREEN 4: LOA REQUESTS -->
         <section id="requests" class="screen">
 
-            <h1>LOA Requests</h1>
+            <h1>LOA Requests</h1> <!--heading-->
 
             <div class="card">
 
                 <h3>Pending Leave Requests</h3>
 
-                <div class="empty">
+                <div class="empty"> <!-- what display when section is empty -->
                     No leave of absence requests
                     have been submitted.
                 </div>
@@ -560,14 +561,17 @@ Creates a white box to organize related content. */
 
                 <p>PTO Available: --</p>
 
+                <!--accept button -->
                 <button class="green-button" disabled>
                     Accept
                 </button>
 
+                 <!--deny button -->
                 <button disabled>
                     Deny
                 </button>
 
+                  <!--request more info button -->
                 <button disabled>
                     Request More Information
                 </button>
@@ -580,27 +584,30 @@ Creates a white box to organize related content. */
         <!-- SCREEN 5: ATTENDANCE -->
         <section id="attendance" class="screen">
 
-            <h1>Attendance</h1>
+            <h1>Attendance</h1> <!-- heading -->
 
             <p id="attendance-date"></p>
 
             <div class="stats">
 
+                 <!-- Displays the number of employees present  -->
                 <div class="stat">
                     Present Today
                     <strong>--</strong>
                 </div>
 
+                      <!-- Displays the number of employees late  -->
                 <div class="stat">
                     Late / Tardy
                     <strong>--</strong>
                 </div>
-
+      <!-- Displays the number of employees on leave  -->
                 <div class="stat">
                     On Leave
                     <strong>--</strong>
                 </div>
 
+                      <!-- Displays the number of employees who have overtime  -->
                 <div class="stat">
                     Overtime Hours
                     <strong>--</strong>
@@ -629,6 +636,7 @@ Creates a white box to organize related content. */
 
                         <tbody>
                             <tr>
+                                  <!-- Displays a message across all six columns when no records exist. -->
                                 <td colspan="6"
                                     style="text-align:center;">
                                     No attendance records available.
@@ -638,8 +646,7 @@ Creates a white box to organize related content. */
 
                     </table>
 
-                </div>
-
+                </div> 
             </div>
 
         </section>
@@ -648,27 +655,31 @@ Creates a white box to organize related content. */
         <!-- SCREEN 6: PERFORMANCE REVIEW -->
         <section id="performance" class="screen">
 
-            <h1>Performance Review</h1>
+            <h1>Performance Review</h1> <!--heading-->
 
-            <h3>Current Review Cycle</h3>
+            <h3>Current Review Cycle</h3>  <!--heading-->
 
             <div class="stats">
 
+                  <!-- Displays the number of performance reviews that have not been completed. -->
                 <div class="stat">
                     Pending Drafts
                     <strong>0</strong>
                 </div>
 
+                 <!-- Displays the total team avergae rating -->
                 <div class="stat">
                     Team Average Rating
                     <strong>--</strong>
                 </div>
 
+                 <!-- Displays the percentage of the review  cycle that has been completed. -->
                 <div class="stat">
                     Review Cycle Progress
                     <strong>--</strong>
                 </div>
 
+                 <!-- Displays the percentage of employee goals that have been  achieved. -->
                 <div class="stat">
                     Goals Met Rate
                     <strong>--</strong>
@@ -678,14 +689,14 @@ Creates a white box to organize related content. */
 
             <div class="card">
 
-                <h3>Evaluation Directory</h3>
+                <h3>Evaluation Directory</h3> <!-- heading -->
 
                 <div class="table-wrap">
 
                     <table>
 
                         <thead>
-                            <tr>
+                            <tr> <!-- information sections -->
                                 <th>Employee</th>
                                 <th>Role</th>
                                 <th>Self Review</th>
@@ -697,6 +708,7 @@ Creates a white box to organize related content. */
 
                         <tbody>
                             <tr>
+                                <!-- text that displays when no information is available to display -->
                                 <td colspan="6"
                                     style="text-align:center;">
                                     No performance reviews available.
@@ -716,22 +728,29 @@ Creates a white box to organize related content. */
         <!-- SCREEN 7: CHAT -->
         <section id="chat" class="screen">
 
-            <h1>Chat</h1>
+            <h1>Chat</h1> <!-- heading -->
 
             <div class="chat-layout">
 
                 <!-- Conversations -->
                 <div class="card">
 
+                    <!-- Heading for the chat conversations section. -->
                     <h3>Conversations</h3>
 
+                    <!-- Search box for finding employees, schedules,
+                         and other information. -->
+                    <input class="search"
+                           type="search"
+                           placeholder="Search employees, schedules, etc.">
+
+                    <!-- Search box for filtering conversations  by name or message. -->
                     <input class="search"
                            type="search"
                            placeholder="Search conversations">
-
                     <br><br>
 
-                    <div class="empty">
+                    <div class="empty"> <!-- what display when no messagees are available -->
                         No conversations yet.
                     </div>
 
@@ -745,17 +764,17 @@ Creates a white box to organize related content. */
                     <hr>
 
                     <div class="empty">
-                        Select a conversation
-                        to view messages.
+                        Select a conversation to view messages.
                     </div>
 
                     <input class="chat-input"
                            type="text"
-                           placeholder="Type a message..."
+                           placeholder="Type a message..." 
                            disabled>
 
                     <br><br>
 
+                    <!-- send button-->
                     <button class="green-button" disabled>
                         Send
                     </button>
@@ -770,13 +789,13 @@ Creates a white box to organize related content. */
         <!-- ASSIGNMENTS -->
         <section id="assignments" class="screen">
 
-            <h1>Assignments</h1>
+            <h1>Assignments</h1> <!-- heading-->
 
             <div class="card">
 
                 <h3>Team Assignments</h3>
 
-                <div class="empty">
+                <div class="empty"> <!-- what will display when no assignments are available -->
                     No assignments available.
                 </div>
 
@@ -788,12 +807,12 @@ Creates a white box to organize related content. */
         <!-- PROFILE -->
         <section id="profile" class="screen">
 
-            <h1>My Profile</h1>
+            <h1>My Profile</h1> <!-- heading -->
 
             <div class="card">
 
+                <!-- information displayed in profile --> 
                 <h3>Manager Information</h3>
-
                 <p>Name: --</p>
                 <p>Email: --</p>
                 <p>Department: --</p>
@@ -807,11 +826,11 @@ Creates a white box to organize related content. */
         <!-- SETTINGS -->
         <section id="settings" class="screen">
 
-            <h1>Settings</h1>
+            <h1>Settings</h1> <!-- heading -->
 
             <div class="card">
 
-                <h3>Account Settings</h3>
+                <h3>Account Settings</h3> <!-- heading -->
 
                 <p>Account preferences will appear here.</p>
 
@@ -823,11 +842,11 @@ Creates a white box to organize related content. */
         <!-- HELP AND SUPPORT -->
         <section id="help" class="screen">
 
-            <h1>Help & Support</h1>
+            <h1>Help & Support</h1> <!-- heading -->
 
             <div class="card">
 
-                <h3>Need Assistance?</h3>
+                <h3>Need Assistance?</h3> <!-- subheading -->
 
                 <p>
                     Support information will be added here.
@@ -851,21 +870,21 @@ Creates a white box to organize related content. */
         let screens = document.querySelectorAll(".screen");
 
         screens.forEach(function(screen) {
-            screen.classList.remove("active");
+            screen.classList.remove("active"); //removes active class from element 
         });
 
         // Display selected screen
         let selectedScreen = document.getElementById(screenId);
 
-        if (selectedScreen) {
-            selectedScreen.classList.add("active");
+        if (selectedScreen) { 
+            selectedScreen.classList.add("active"); // adds active class to the selected screen
         }
 
         // Remove active styling from sidebar buttons
         let buttons = document.querySelectorAll(".nav-button");
 
         buttons.forEach(function(button) {
-            button.classList.remove("active");
+            button.classList.remove("active"); // removes the active class
         });
 
         // Highlight selected sidebar button
@@ -873,8 +892,9 @@ Creates a white box to organize related content. */
             '.nav-button[data-screen="' + screenId + '"]'
         );
 
+        //checks if nav button was found
         if (selectedButton) {
-            selectedButton.classList.add("active");
+            selectedButton.classList.add("active"); // adds active class
         }
 
     }
@@ -884,9 +904,9 @@ Creates a white box to organize related content. */
 
     document.getElementById("attendance-date").textContent =
         today.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
+            year: "numeric", //year will appear in XXXX format
+            month: "long", // month will be written
+            day: "numeric" // date will appear in numerical form
         });
 
 </script>
