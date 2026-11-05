@@ -59,7 +59,7 @@
       "workType": "Full-Time (Hybrid)",
       "birthday": "1996-11-05",
       "joinDate": "2023-06-01",
-      "ptoAvailable": 14,
+      "ptoAvailable": 8,
       "shift": "09:00 AM - 05:00 PM",
       "workDays": [
         "Mon",
@@ -107,6 +107,213 @@
       "joinDate": "2024-01-20",
       "ptoAvailable": 10,
       "shift": "08:00 AM - 04:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp-sbennett",
+      "username": "SophiaBennett",
+      "password": "sophiabennett123",
+      "role": "employee",
+      "name": "Sophia Bennett",
+      "email": "sophia.bennett@tasksync.com",
+      "phone": "555-123-4567",
+      "department": "Marketing",
+      "position": "Marketing Specialist",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "1998-03-14",
+      "joinDate": "2024-03-15",
+      "ptoAvailable": 15,
+      "shift": "09:00 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp-omitchell",
+      "username": "OliviaMitchell",
+      "password": "oliviamitchell123",
+      "role": "employee",
+      "name": "Olivia Mitchell",
+      "email": "olivia.mitchell@tasksync.com",
+      "phone": "555-246-2812",
+      "department": "Accounting",
+      "position": "Accountant",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "2001-07-22",
+      "joinDate": "2024-05-01",
+      "ptoAvailable": 15,
+      "shift": "08:30 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp-nwilliams",
+      "username": "NoahWilliams",
+      "password": "noahwilliams123",
+      "role": "employee",
+      "name": "Noah Williams",
+      "email": "noah.williams@tasksync.com",
+      "phone": "555-987-5431",
+      "department": "Information Technology",
+      "position": "IT Specialist",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "1987-06-12",
+      "joinDate": "2023-01-10",
+      "ptoAvailable": 18,
+      "shift": "08:00 AM - 04:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp-igarcia",
+      "username": "IsabellaGarcia",
+      "password": "isabellagarcia123",
+      "role": "employee",
+      "name": "Isabella Garcia",
+      "email": "isabella.garcia@tasksync.com",
+      "phone": "555-472-9223",
+      "department": "Sales",
+      "position": "Sales Representative",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "1980-05-13",
+      "joinDate": "2022-11-01",
+      "ptoAvailable": 16,
+      "shift": "09:00 AM - 05:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-emp-jwilson",
+      "username": "JamesWilson",
+      "password": "jameswilson123",
+      "role": "employee",
+      "name": "James Wilson",
+      "email": "james.wilson@tasksync.com",
+      "phone": "555-213-442",
+      "department": "Human Resources",
+      "position": "Recruiter",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "1999-02-27",
+      "joinDate": "2024-02-15",
+      "ptoAvailable": 15,
+      "shift": "09:00 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-mgr-cdavis",
+      "username": "CharlotteDavis",
+      "password": "charlottedavis246",
+      "role": "manager",
+      "name": "Charlotte Davis",
+      "email": "charlotte.davis@tasksync.com",
+      "phone": "555-542-4542",
+      "department": "Operations",
+      "position": "Manager",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "1990-08-20",
+      "joinDate": "2021-08-01",
+      "ptoAvailable": 20,
+      "shift": "08:30 AM - 05:00 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-mgr-msmith",
+      "username": "MichaelSmith",
+      "password": "michaelsmith246",
+      "role": "manager",
+      "name": "Michael Smith",
+      "email": "michael.smith@tasksync.com",
+      "phone": "555-364-3244",
+      "department": "Sales & Marketing",
+      "position": "Manager",
+      "workType": "Full-Time (Hybrid)",
+      "birthday": "2002-07-01",
+      "joinDate": "2023-09-01",
+      "ptoAvailable": 16,
+      "shift": "09:00 AM - 05:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-adm-eanderson",
+      "username": "EthanAnderson",
+      "password": "ethananderson157",
+      "role": "admin",
+      "name": "Ethan Anderson",
+      "email": "ethan.anderson@tasksync.com",
+      "phone": "555-3432-3432",
+      "department": "IT & Infrastructure",
+      "position": "System Admin",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "2001-04-03",
+      "joinDate": "2022-04-15",
+      "ptoAvailable": 20,
+      "shift": "08:00 AM - 04:30 PM",
+      "workDays": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri"
+      ]
+    },
+    {
+      "id": "u-adm-ecarter",
+      "username": "EmmaCarter",
+      "password": "emmacarter157",
+      "role": "admin",
+      "name": "Emma Carter",
+      "email": "emma.carter@tasksync.com",
+      "phone": "555-3423-3432",
+      "department": "Human Resources",
+      "position": "HR Administrator",
+      "workType": "Full-Time (On-Site)",
+      "birthday": "2002-04-20",
+      "joinDate": "2023-05-10",
+      "ptoAvailable": 20,
+      "shift": "08:30 AM - 05:00 PM",
       "workDays": [
         "Mon",
         "Tue",
@@ -164,6 +371,66 @@
       "progress": 20,
       "status": "In Progress",
       "createdAt": "2026-11-03"
+    },
+    {
+      "id": "asg-sb-1",
+      "title": "Brand Awareness Campaign Q4",
+      "description": "Prepare copy and visuals for product marketing launch.",
+      "employeeId": "u-emp-sbennett",
+      "assignedBy": "Michael Smith",
+      "dueDate": "2026-11-20",
+      "priority": "High",
+      "progress": 45,
+      "status": "In Progress",
+      "createdAt": "2026-11-05"
+    },
+    {
+      "id": "asg-om-1",
+      "title": "Quarterly Financial Reconciliation",
+      "description": "Reconcile vendor accounts and corporate expense reports.",
+      "employeeId": "u-emp-omitchell",
+      "assignedBy": "Charlotte Davis",
+      "dueDate": "2026-11-25",
+      "priority": "Medium",
+      "progress": 30,
+      "status": "In Progress",
+      "createdAt": "2026-11-05"
+    },
+    {
+      "id": "asg-nw-1",
+      "title": "Network Firewall Firmware Upgrade",
+      "description": "Execute scheduled maintenance and patch vulnerabilities on primary switches.",
+      "employeeId": "u-emp-nwilliams",
+      "assignedBy": "Ethan Anderson",
+      "dueDate": "2026-11-12",
+      "priority": "High",
+      "progress": 70,
+      "status": "In Progress",
+      "createdAt": "2026-11-05"
+    },
+    {
+      "id": "asg-ig-1",
+      "title": "Enterprise Client Outreach Pipeline",
+      "description": "Follow up with tier-1 enterprise prospects for year-end renewals.",
+      "employeeId": "u-emp-igarcia",
+      "assignedBy": "Michael Smith",
+      "dueDate": "2026-11-18",
+      "priority": "High",
+      "progress": 55,
+      "status": "In Progress",
+      "createdAt": "2026-11-05"
+    },
+    {
+      "id": "asg-jw-1",
+      "title": "Engineering Candidate Screening",
+      "description": "Review candidate pool for Senior DevOps and Backend Developer positions.",
+      "employeeId": "u-emp-jwilson",
+      "assignedBy": "Emma Carter",
+      "dueDate": "2026-11-16",
+      "priority": "Medium",
+      "progress": 60,
+      "status": "In Progress",
+      "createdAt": "2026-11-05"
     }
   ],
   "schedules": [
@@ -187,6 +454,69 @@
       "date": "2026-11-03",
       "shift": "08:00 AM - 04:30 PM",
       "note": "Release Candidate Testing"
+    },
+    {
+      "id": "sch-u-emp-sbennett",
+      "employeeId": "u-emp-sbennett",
+      "date": "2026-11-05",
+      "shift": "09:00 AM - 05:00 PM",
+      "note": "Standard shift - Marketing Specialist"
+    },
+    {
+      "id": "sch-u-emp-omitchell",
+      "employeeId": "u-emp-omitchell",
+      "date": "2026-11-05",
+      "shift": "08:30 AM - 05:00 PM",
+      "note": "Standard shift - Accountant"
+    },
+    {
+      "id": "sch-u-emp-nwilliams",
+      "employeeId": "u-emp-nwilliams",
+      "date": "2026-11-05",
+      "shift": "08:00 AM - 04:30 PM",
+      "note": "Standard shift - IT Specialist"
+    },
+    {
+      "id": "sch-u-emp-igarcia",
+      "employeeId": "u-emp-igarcia",
+      "date": "2026-11-05",
+      "shift": "09:00 AM - 05:30 PM",
+      "note": "Standard shift - Sales Representative"
+    },
+    {
+      "id": "sch-u-emp-jwilson",
+      "employeeId": "u-emp-jwilson",
+      "date": "2026-11-05",
+      "shift": "09:00 AM - 05:00 PM",
+      "note": "Standard shift - Recruiter"
+    },
+    {
+      "id": "sch-u-mgr-cdavis",
+      "employeeId": "u-mgr-cdavis",
+      "date": "2026-11-05",
+      "shift": "08:30 AM - 05:00 PM",
+      "note": "Standard shift - Manager"
+    },
+    {
+      "id": "sch-u-mgr-msmith",
+      "employeeId": "u-mgr-msmith",
+      "date": "2026-11-05",
+      "shift": "09:00 AM - 05:30 PM",
+      "note": "Standard shift - Manager"
+    },
+    {
+      "id": "sch-u-adm-eanderson",
+      "employeeId": "u-adm-eanderson",
+      "date": "2026-11-05",
+      "shift": "08:00 AM - 04:30 PM",
+      "note": "Standard shift - System Admin"
+    },
+    {
+      "id": "sch-u-adm-ecarter",
+      "employeeId": "u-adm-ecarter",
+      "date": "2026-11-05",
+      "shift": "08:30 AM - 05:00 PM",
+      "note": "Standard shift - HR Administrator"
     }
   ],
   "loaRequests": [
@@ -199,7 +529,7 @@
       "daysRequested": 3,
       "reason": "Family holiday travel out of state.",
       "previousRequests": 1,
-      "status": "Pending",
+      "status": "Approved",
       "managerNote": ""
     },
     {
@@ -220,9 +550,9 @@
       "id": "att-1",
       "employeeId": "u-emp1",
       "date": "2026-11-03",
-      "clockIn": "05:29 PM",
-      "clockOut": "--",
-      "totalHours": 8,
+      "clockIn": "08:55 AM",
+      "clockOut": "05:10 PM",
+      "totalHours": 8.25,
       "overtimeHours": 0.25,
       "status": "Present"
     },
@@ -230,11 +560,11 @@
       "id": "att-2",
       "employeeId": "u-emp2",
       "date": "2026-11-03",
-      "clockIn": "05:29 PM",
+      "clockIn": "09:48 AM",
       "clockOut": "--",
-      "totalHours": 8,
+      "totalHours": 0,
       "overtimeHours": 0,
-      "status": "Present"
+      "status": "Late / Tardy"
     },
     {
       "id": "att-3",
@@ -244,6 +574,56 @@
       "clockOut": "05:30 PM",
       "totalHours": 9.5,
       "overtimeHours": 1.5,
+      "status": "Present"
+    },
+    {
+      "id": "att-sb-1",
+      "employeeId": "u-emp-sbennett",
+      "date": "2026-11-05",
+      "clockIn": "12:58 PM",
+      "clockOut": "12:58 PM",
+      "totalHours": 8,
+      "overtimeHours": 0,
+      "status": "Present"
+    },
+    {
+      "id": "att-om-1",
+      "employeeId": "u-emp-omitchell",
+      "date": "2026-11-05",
+      "clockIn": "08:28 AM",
+      "clockOut": "--",
+      "totalHours": 0,
+      "overtimeHours": 0,
+      "status": "Present"
+    },
+    {
+      "id": "att-nw-1",
+      "employeeId": "u-emp-nwilliams",
+      "date": "2026-11-05",
+      "clockIn": "07:55 AM",
+      "clockOut": "--",
+      "totalHours": 0,
+      "overtimeHours": 0,
+      "status": "Present"
+    },
+    {
+      "id": "att-ig-1",
+      "employeeId": "u-emp-igarcia",
+      "date": "2026-11-05",
+      "clockIn": "09:05 AM",
+      "clockOut": "--",
+      "totalHours": 0,
+      "overtimeHours": 0,
+      "status": "Late / Tardy"
+    },
+    {
+      "id": "att-jw-1",
+      "employeeId": "u-emp-jwilson",
+      "date": "2026-11-05",
+      "clockIn": "08:52 AM",
+      "clockOut": "--",
+      "totalHours": 0,
+      "overtimeHours": 0,
       "status": "Present"
     }
   ],
@@ -277,6 +657,56 @@
       "finalRating": null,
       "goalsMetRate": 78,
       "status": "Pending Draft"
+    },
+    {
+      "id": "perf-u-emp-sbennett",
+      "employeeId": "u-emp-sbennett",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 80,
+      "status": "Pending Draft"
+    },
+    {
+      "id": "perf-u-emp-omitchell",
+      "employeeId": "u-emp-omitchell",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 80,
+      "status": "Pending Draft"
+    },
+    {
+      "id": "perf-u-emp-nwilliams",
+      "employeeId": "u-emp-nwilliams",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 80,
+      "status": "Pending Draft"
+    },
+    {
+      "id": "perf-u-emp-igarcia",
+      "employeeId": "u-emp-igarcia",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 80,
+      "status": "Pending Draft"
+    },
+    {
+      "id": "perf-u-emp-jwilson",
+      "employeeId": "u-emp-jwilson",
+      "cycle": "Q4 2026",
+      "selfReview": "Pending Submission",
+      "managerReview": "Draft Pending",
+      "finalRating": null,
+      "goalsMetRate": 80,
+      "status": "Pending Draft"
     }
   ],
   "reports": [
@@ -307,7 +737,7 @@
       "recipientName": "Taylor Reed",
       "recipientEmail": "employee@tasksync.com",
       "text": "Hi Taylor, great progress on the onboarding documentation! Let me know if you need anything for the Q4 API audit.",
-      "timestamp": "2026-11-03T13:30:00.000Z"
+      "timestamp": "2026-11-03T14:00:00.000Z"
     },
     {
       "id": "msg-2",
@@ -318,7 +748,7 @@
       "recipientName": "Jordan Taylor",
       "recipientEmail": "manager@tasksync.com",
       "text": "Thanks Jordan! I am 65% through the API audit and on track for the due date.",
-      "timestamp": "2026-11-03T14:15:00.000Z"
+      "timestamp": "2026-11-03T15:00:00.000Z"
     },
     {
       "id": "msg-3",
@@ -329,18 +759,7 @@
       "recipientName": "Jordan Taylor",
       "recipientEmail": "manager@tasksync.com",
       "text": "Hi Jordan, please review the pending Q4 performance drafts and LOA requests by Friday.",
-      "timestamp": "2026-11-03T15:00:00.000Z"
-    },
-    {
-      "id": "msg-1793744987185",
-      "senderId": "u-admin",
-      "senderName": "Alex Morgan",
-      "senderEmail": "admin@tasksync.com",
-      "recipientId": "u-emp1",
-      "recipientName": "Taylor Reed",
-      "recipientEmail": "employee@tasksync.com",
-      "text": "dfds",
-      "timestamp": "2026-11-03T22:29:47.185Z"
+      "timestamp": "2026-11-03T16:00:00.000Z"
     }
   ]
 }
