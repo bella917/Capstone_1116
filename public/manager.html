@@ -11,6 +11,7 @@
             box-sizing: border-box;
         }
 
+        /* formatting */
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -18,6 +19,7 @@
             color: #242833;
         }
 
+        /*assigns layour for entire page*/
         .layout {
             display: flex;
             min-height: 100vh;
@@ -31,7 +33,7 @@
             padding: 25px 15px;
             flex-shrink: 0;
         }
-
+    /*formats company name in the sidebar */
         .brand {
             color: #9de3ac;
             font-size: 21px;
@@ -39,6 +41,7 @@
             font-weight: bold;
         }
 
+        /*formats the side bar navigation buttons */
         .nav-button {
             display: block;
             width: 100%;
@@ -53,11 +56,13 @@
             cursor: pointer;
         }
 
+        /* navigation button formats - green highlight when hover */
         .nav-button:hover,
         .nav-button.active {
             background: linear-gradient(to right, #8be9a1, #397f4a);
         }
 
+        /*seperates navigation bar from main screen*/
         .divider {
             border-top: 1px solid #39404b;
             margin: 25px 10px;
@@ -70,6 +75,7 @@
             padding: 30px 40px;
         }
 
+        /*top navigation bar formatting*/
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -78,6 +84,7 @@
             gap: 15px;
         }
 
+        /*search bar formatting*/
         .search {
             width: 400px;
             max-width: 100%;
@@ -86,6 +93,7 @@
             border-radius: 25px;
         }
 
+        /*account section stlying*/
         .account {
             color: #4fa968;
             font-size: 25px;
@@ -96,18 +104,20 @@
             display: none;
         }
 
+        /*will display the selected screen dependent on the login*/
         .screen.active {
             display: block;
         }
-
+      /* Main heading styling. */
         h1 {
             font-size: 25px;
         }
-
+ /* secondary heading styling. */
         h2 {
             font-size: 20px;
         }
 
+         /* third heading styling. */
         h3 {
             font-size: 16px;
         }
@@ -119,6 +129,8 @@
             gap: 20px;
         }
 
+ /* Card container styling.
+Creates a white box to organize related content. */
         .card {
             background: white;
             border: 1px solid #e5e5e5;
@@ -126,17 +138,18 @@
             padding: 24px;
             margin-bottom: 20px;
         }
-
+  /* Green button styling. */
         .green-button {
             background: linear-gradient(to right, #8be9a1, #397f4a);
             color: white;
             border: none;
             border-radius: 25px;
             padding: 12px 24px;
-            cursor: pointer;
+            cursor: pointer; /*Changes the cursor to a pointer when hovered over. */
             font-weight: bold;
         }
 
+        /*green button hover in navbar */
         .green-button:hover {
             opacity: 0.9;
         }
@@ -159,6 +172,7 @@
             margin-bottom: 25px;
         }
 
+        /*stats card stlying */
         .stat {
             background: white;
             border: 1px solid #e5e5e5;
@@ -166,6 +180,7 @@
             padding: 20px;
         }
 
+         /* Styling for important text inside a statistic card. */
         .stat strong {
             display: block;
             font-size: 25px;
@@ -177,50 +192,58 @@
             overflow-x: auto;
         }
 
+        /* Makes the table fill the available width,
+           combines adjacent cell borders, and gives
+           the table a white background. */ 
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
         }
-
+        
+/* Table header and cell styling. */
         th, td {
             padding: 12px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;  /*assigns a light gray color*/
             text-align: left;
         }
 
+        /* sets the table background color */
         th {
-            background: #f0f0f0;
+            background: #f0f0f0;   /*assigns a light gray color*/
         }
 
         /* Task progress */
         .progress {
             width: 100%;
             height: 22px;
-            background: #a7e5b4;
+            background: #a7e5b4;  /*assigns a light pastel green color*/
             border-radius: 20px;
             overflow: hidden;
             margin: 15px 0;
         }
 
+        /* Progress bar fill styling.*/
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: #5bab70;
+            background: #5bab70; /*assigns a light green color*/
             border-radius: 20px;
         }
 
-        /* Chat */
+        /* Chatbox layour and stlying */
         .chat-layout {
             display: grid;
             grid-template-columns: 250px 1fr;
             gap: 20px;
         }
 
+       /* Chatbox sizing */
         .chat-box {
             min-height: 350px;
         }
 
+        /*chatbox input section stlying*/
         .chat-input {
             width: 100%;
             padding: 12px;
@@ -229,19 +252,26 @@
             margin-top: 20px;
         }
 
-        @media (max-width: 800px) {
+        /*responsie design for smaller screens*/
+        @media (max-width: 800px) {  /* Stacks the sidebar and main content
+               vertically instead of side by side. */
             .layout {
                 flex-direction: column;
             }
 
+            /* Makes the sidebar fill the screen width
+               on smaller devices. */
             .sidebar {
                 width: 100%;
             }
 
+             /* Reduces the spacing inside the main content
+               area to fit smaller screens. */
             .content {
                 padding: 20px;
             }
-
+            
+            /*formats so that content will be vertical on smaller screens*/ 
             .cards,
             .stats,
             .chat-layout {
@@ -258,76 +288,88 @@
     <!-- LEFT SIDE NAVIGATION -->
     <div class="sidebar">
 
+          <!-- company logo/name in sidebar -->
         <div class="brand">
             ▰ TaskSync
         </div>
 
+          <!-- dashboard button -->
         <button class="nav-button active"
                 data-screen="dashboard"
-                onclick="showScreen('dashboard')">
-            ▦ Dashboard
+                onclick="showScreen('dashboard')">   <!-- when clicked, employee dashboard  screen is opened-->
+            ▦ Dashboard     
         </button>
 
+        <!-- assignment button -->
         <button class="nav-button"
                 data-screen="assignments"
-                onclick="showScreen('assignments')">
+                onclick="showScreen('assignments')">  <!-- when clicked, employee assignment  screen is opened-->
             ▤ Assignments
         </button>
 
+        <!-- my team button -->
         <button class="nav-button"
                 data-screen="team"
-                onclick="showScreen('team')">
+                onclick="showScreen('team')">  <!-- when clicked, employee team screen is opened-->
             ▣ My Team
         </button>
 
+        <!-- loa request button -->
         <button class="nav-button"
                 data-screen="requests"
-                onclick="showScreen('requests')">
+                onclick="showScreen('requests')">  <!-- when clicked, employee LOA request  screen is opened-->
             ▧ LOA Requests
         </button>
 
+        <!-- attendance button -->
         <button class="nav-button"
                 data-screen="attendance"
-                onclick="showScreen('attendance')">
+                onclick="showScreen('attendance')">  <!-- when clicked, employee attendance  screen is opened-->
             ▦ Attendance
         </button>
 
+        <!-- performance review button -->
         <button class="nav-button"
                 data-screen="performance"
-                onclick="showScreen('performance')">
+                onclick="showScreen('performance')">  <!-- when clicked, employee perforamnce screen is opened-->
             ◕ Performance Review
         </button>
 
+        <!-- chatbox button -->
         <button class="nav-button"
                 data-screen="chat"
-                onclick="showScreen('chat')">
+                onclick="showScreen('chat')">  <!-- when clicked, employee chat  screen is opened-->
             ▰ Chat
         </button>
 
-        <div class="divider"></div>
+        <div class="divider"></div> <!-- divder  -->
 
+        <!-- profile button -->
         <button class="nav-button"
                 data-screen="profile"
-                onclick="showScreen('profile')">
+                onclick="showScreen('profile')">  <!-- when clicked, employee profile is opened-->
             ♙ Profile
         </button>
 
+        <!-- setting button -->
         <button class="nav-button"
                 data-screen="settings"
-                onclick="showScreen('settings')">
+                onclick="showScreen('settings')"> <!-- when clicked settings is opened-->
             ⚙ Settings
         </button>
 
+        <!-- logout button -->
         <button class="nav-button"
-                onclick="window.location.href='index.html'">
+                onclick="window.location.href='index.html'"> <!-- when clicked, user is returned to the login screen-->
             ↪ Logout
         </button>
 
         <div class="divider"></div>
 
+          <!-- help button -->
         <button class="nav-button"
                 data-screen="help"
-                onclick="showScreen('help')">
+                onclick="showScreen('help')"> <!-- when clickeded help screen is opened-->
             ? Help & Support
         </button>
 
