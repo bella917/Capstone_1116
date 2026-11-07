@@ -22,6 +22,13 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
+  // Attendance logs for today only. The buttons and clock actions always edit
+  // today's log, so the screens must read today's log too (not an older one).
+  function attendanceToday() {
+    const t = localISO();
+    return STATE.attendance.filter((a) => a.date === t);
+  }
+
   // Helper for API requests
   async function api(url, method = 'GET', body = null) {
     const opts = {
@@ -239,9 +246,10 @@
 
     // Card 2: Employee Attendance Summary
     if (cards[1]) {
-      const present = STATE.attendance.filter((a) => a.status === 'Present').length;
-      const late = STATE.attendance.filter((a) => a.status === 'Late / Tardy').length;
-      const ot = STATE.attendance.reduce(
+      const todayAtt = attendanceToday();
+      const present = todayAtt.filter((a) => a.status === 'Present').length;
+      const late = todayAtt.filter((a) => a.status === 'Late / Tardy').length;
+      const ot = todayAtt.reduce(
         (sum, a) => sum + Number(a.overtimeHours || 0),
         0
       );
@@ -739,12 +747,13 @@
     if (!sec) return;
 
     const employees = STATE.users.filter((u) => u.role === 'employee');
-    const presentCount = STATE.attendance.filter((a) => a.status === 'Present').length;
-    const lateCount = STATE.attendance.filter((a) => a.status === 'Late / Tardy').length;
+    const todayAtt = attendanceToday();
+    const presentCount = todayAtt.filter((a) => a.status === 'Present').length;
+    const lateCount = todayAtt.filter((a) => a.status === 'Late / Tardy').length;
     const onLeaveCount =
-      STATE.attendance.filter((a) => a.status === 'On Leave').length +
+      todayAtt.filter((a) => a.status === 'On Leave').length +
       STATE.loaRequests.filter((l) => l.status === 'Approved').length;
-    const totalOt = STATE.attendance.reduce(
+    const totalOt = todayAtt.reduce(
       (sum, a) => sum + Number(a.overtimeHours || 0),
       0
     );
@@ -761,7 +770,7 @@
     if (tbody) {
       tbody.innerHTML = employees
         .map((emp) => {
-          const rec = STATE.attendance.find((a) => a.employeeId === emp.id) || {
+          const rec = todayAtt.find((a) => a.employeeId === emp.id) || {
             clockIn: '--',
             clockOut: '--',
             totalHours: 0,
@@ -894,7 +903,7 @@
       },
       {
         type: 'Attendance Report',
-        info: `${STATE.attendance.length} attendance logs recorded today.`
+        info: `${attendanceToday().length} attendance logs recorded today.`
       },
       {
         type: 'Performance Report',
@@ -1549,7 +1558,10 @@
       '#calendar-grid .calendar-day:not(.blank)'
     );
     dayCells.forEach((cell) => {
-      const dayNum = parseInt(cell.textContent, 10);
+      // The page draws the plain day number once. Remember it, because after the
+      // first decoration the cell text also contains shift and leave labels.
+      if (!cell.dataset.day) cell.dataset.day = String(parseInt(cell.textContent, 10) || '');
+      const dayNum = parseInt(cell.dataset.day, 10);
       if (!dayNum) return;
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(
         dayNum
