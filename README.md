@@ -113,3 +113,24 @@ Administrators and Managers can onboard new employees from the **My Team** tab b
 * **Progress & Self-Review:** Track overall task completion and submit Q4 self-review evaluations.
 
 * **Chat, Profile & Settings:** Send messages to managers or administrators, view message history, and update personal profile details.
+
+## Security and Permissions (added Nov 3)
+
+* **Sessions:** logging in sets an HttpOnly session cookie (8 hours). Every API route checks it. Logout ends the session on the server.
+* **Roles:** employees only receive their own tasks, schedule, leave, attendance, reviews and messages. Managers and admins manage the team. Only admins can remove employees, create manager/admin accounts, change roles, reset other people's passwords and generate reports.
+* **Passwords:** stored hashed (scrypt) in `data/db.json`. Existing plain-text passwords are converted automatically the first time the server starts. The demo logins in the table above are unchanged.
+* **Locked down files:** only the contents of `public/` and the logo are served. `data/`, `server.js` and `package.json` can no longer be downloaded.
+* **Brute force:** 5 wrong passwords in a row locks that login for 1 minute.
+* **Input:** text is cleaned before it is stored, dates, ratings, progress (0-100) and priorities are validated, and an employee can only change the progress of their own tasks.
+* **Task status:** `Not Started` (0%), `In Progress` (1-99%), `Completed` (100%). It is calculated from progress.
+* **Assigning tasks:** managers and admins can assign from the Assignments tab, or from My Team > View Details > Assign a Task.
+
+## Schedules, Messages and Reviews (added Nov 6)
+
+* **Shifts:** managers and admins add and remove shifts from My Team > View Details. Shifts are checked (valid date, hours up to 50 characters, note up to 120, no exact duplicates) and employees see them, sorted by date, on their Schedule page and calendar. Past shifts are marked Past.
+* **Messages:** employees pick a manager or admin from a suggestion list (every manager and admin is listed). The sender is always the logged-in person. Messages are up to 1,500 characters, show a date and time, and are visible only to the two people in the conversation.
+* **Performance reviews:** managers and admins write the manager feedback and the 1.0 to 5.0 rating (My Team > Performance Review). Employees write their own self review and read the manager feedback and rating on their Progress page. Review text is limited to 600 characters. A wrong value shows an error message instead of failing silently.
+* **Live refresh:** each portal checks the server every 8 seconds. New tasks, shifts, messages, reviews and status changes appear without reloading. It never refreshes while someone is typing, so an unfinished message or form is not lost, and it shows a short "New message from ..." notice.
+* **Dates:** "today" now uses the local time zone instead of UTC. Before, anything done after 7 PM Eastern was filed under tomorrow's date (clock-ins, new tasks, default dates).
+* **Layout fix:** `manager.html` had one stray closing tag in the dashboard section that pushed the dashboard cards outside the page content on every manager screen. It is removed.
+* **Tests:** with the server running on fresh data, `node tests/suite.js` and `node tests/flows.js` run 263 checks in total (see `tests/README.txt`).
