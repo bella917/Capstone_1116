@@ -16,6 +16,19 @@
     searchQuery: ''
   };
 
+  // Today's date in the browser's own time zone (YYYY-MM-DD), not UTC
+  function localISO(d) {
+    d = d || new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  // Attendance logs for today only. The buttons and clock actions always edit
+  // today's log, so the screens must read today's log too (not an older one).
+  function attendanceToday() {
+    const t = localISO();
+    return STATE.attendance.filter((a) => a.date === t);
+  }
+
   // Helper for API requests
   async function api(url, method = 'GET', body = null) {
     const opts = {
@@ -23,8 +36,14 @@
       headers: { 'Content-Type': 'application/json' }
     };
     if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(url, opts);
+    const res = await fetch(url, { ...opts, credentials: 'same-origin' });
     const data = await res.json().catch(() => ({}));
+    if (res.status === 401 && !url.includes('/api/auth/login')) {
+      // Session ended or never started: go back to the login page
+      try { localStorage.removeItem('tasksync_user'); } catch (e) {}
+      window.location.href = '/';
+      throw new Error('Please log in.');
+    }
     if (!res.ok) throw new Error(data.error || 'Request failed');
     return data;
   }
@@ -66,6 +85,16 @@
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 3200);
   }
+
+  // Any request that fails and is not handled on the spot shows its reason as a
+  // message instead of failing silently.
+  window.addEventListener('unhandledrejection', function (e) {
+    const msg = e && e.reason && e.reason.message;
+    if (msg && msg !== 'Please log in.' && msg !== 'Wrong portal for this account.') {
+      showToast(msg);
+      e.preventDefault();
+    }
+  });
 
   // ==================== 1. LOGIN PAGE LOGIC ====================
   function initLoginPage() {
@@ -111,6 +140,7 @@
   // ==================== 2. SHARED DATA LOADER ====================
   async function loadState(defaultRole) {
     const data = await api('/api/bootstrap');
+    STATE.sig = JSON.stringify(data); // what this screen was built from
     STATE.users = data.users;
     STATE.assignments = data.assignments;
     STATE.schedules = data.schedules;
@@ -120,21 +150,15 @@
     STATE.reports = data.reports;
     STATE.messages = data.messages;
 
-    let savedUser = null;
-    try {
-      savedUser = JSON.parse(localStorage.getItem('tasksync_user'));
-    } catch (e) {}
-
-    if (savedUser) {
-      const fresh = STATE.users.find((u) => u.id === savedUser.id);
-      if (fresh) savedUser = fresh;
-    }
-
+    // The server tells us who is logged in (from the session cookie).
+    let savedUser = data.me;
     if (!savedUser || savedUser.role !== defaultRole) {
-      savedUser =
-        STATE.users.find((u) => u.role === defaultRole) || STATE.users[0];
-      localStorage.setItem('tasksync_user', JSON.stringify(savedUser));
+      // Wrong portal for this account: send them to their own portal
+      const home = { admin: '/administrator.html', manager: '/manager.html', employee: '/employee.html' };
+      window.location.href = savedUser ? home[savedUser.role] : '/';
+      throw new Error('Wrong portal for this account.');
     }
+    try { localStorage.setItem('tasksync_user', JSON.stringify(savedUser)); } catch (e) {}
 
     STATE.currentUser = savedUser;
 
@@ -222,9 +246,10 @@
 
     // Card 2: Employee Attendance Summary
     if (cards[1]) {
-      const present = STATE.attendance.filter((a) => a.status === 'Present').length;
-      const late = STATE.attendance.filter((a) => a.status === 'Late / Tardy').length;
-      const ot = STATE.attendance.reduce(
+      const todayAtt = attendanceToday();
+      const present = todayAtt.filter((a) => a.status === 'Present').length;
+      const late = todayAtt.filter((a) => a.status === 'Late / Tardy').length;
+      const ot = todayAtt.reduce(
         (sum, a) => sum + Number(a.overtimeHours || 0),
         0
       );
@@ -273,7 +298,7 @@
         </div>
         <div>
           <label>Due Date</label>
-          <input type="date" name="dueDate" value="${new Date().toISOString().split('T')[0]}" required>
+          <input type="date" name="dueDate" value="${localISO()}" required>
         </div>
         <div>
           <label>Priority</label>
@@ -498,7 +523,9 @@
 
     const cards = sec.querySelectorAll('.cards > .card');
     const empTasks = STATE.assignments.filter((a) => a.employeeId === emp.id);
-    const empScheds = STATE.schedules.filter((s) => s.employeeId === emp.id);
+    const empScheds = STATE.schedules
+      .filter((s) => s.employeeId === emp.id)
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
     const avgProgress =
       empTasks.length > 0
         ? Math.round(
@@ -550,7 +577,7 @@
         <form id="ts-assign-schedule-form" class="ts-form-grid">
           <div>
             <label>Date</label>
-            <input type="date" name="date" value="${new Date().toISOString().split('T')[0]}" required>
+            <input type="date" name="date" value="${localISO()}" required>
           </div>
           <div>
             <label>Shift Hours</label>
@@ -609,7 +636,46 @@
                 )
                 .join('')
         }
+        <hr>
+        <h3>Assign a Task to ${emp.name}</h3>
+        <form id="ts-detail-assign-form" class="ts-form-grid">
+          <div><label>Task Title</label><input type="text" name="title" placeholder="e.g. Update client report" required></div>
+          <div><label>Due Date</label><input type="date" name="dueDate" value="${localISO()}" required></div>
+          <div>
+            <label>Priority</label>
+            <select name="priority">
+              <option value="High">High</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div><label>Description</label><input type="text" name="description" placeholder="Key deliverables..."></div>
+          <div style="display:flex; align-items:flex-end;">
+            <button type="submit" class="${btnClass}" style="width:100%;">+ Assign Task</button>
+          </div>
+        </form>
       `;
+    }
+    const detailAssignForm = document.getElementById('ts-detail-assign-form');
+    if (detailAssignForm) {
+      detailAssignForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(detailAssignForm);
+        try {
+          await api('/api/assignments', 'POST', {
+            title: fd.get('title'),
+            employeeId: emp.id,
+            dueDate: fd.get('dueDate'),
+            priority: fd.get('priority'),
+            description: fd.get('description')
+          });
+          await loadState(role);
+          renderAdminManagerAll(role, btnClass);
+          showToast(`Task assigned to ${emp.name}.`);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
     }
   }
 
@@ -681,12 +747,13 @@
     if (!sec) return;
 
     const employees = STATE.users.filter((u) => u.role === 'employee');
-    const presentCount = STATE.attendance.filter((a) => a.status === 'Present').length;
-    const lateCount = STATE.attendance.filter((a) => a.status === 'Late / Tardy').length;
+    const todayAtt = attendanceToday();
+    const presentCount = todayAtt.filter((a) => a.status === 'Present').length;
+    const lateCount = todayAtt.filter((a) => a.status === 'Late / Tardy').length;
     const onLeaveCount =
-      STATE.attendance.filter((a) => a.status === 'On Leave').length +
+      todayAtt.filter((a) => a.status === 'On Leave').length +
       STATE.loaRequests.filter((l) => l.status === 'Approved').length;
-    const totalOt = STATE.attendance.reduce(
+    const totalOt = todayAtt.reduce(
       (sum, a) => sum + Number(a.overtimeHours || 0),
       0
     );
@@ -703,7 +770,7 @@
     if (tbody) {
       tbody.innerHTML = employees
         .map((emp) => {
-          const rec = STATE.attendance.find((a) => a.employeeId === emp.id) || {
+          const rec = todayAtt.find((a) => a.employeeId === emp.id) || {
             clockIn: '--',
             clockOut: '--',
             totalHours: 0,
@@ -836,7 +903,7 @@
       },
       {
         type: 'Attendance Report',
-        info: `${STATE.attendance.length} attendance logs recorded today.`
+        info: `${attendanceToday().length} attendance logs recorded today.`
       },
       {
         type: 'Performance Report',
@@ -942,7 +1009,7 @@
                   (m) => `
               <div class="ts-msg ${m.senderId === STATE.currentUser.id ? 'mine' : 'theirs'}">
                 <strong>${m.senderName}:</strong> ${m.text}
-                <div style="font-size:10px; color:#777; margin-top:3px;">${new Date(m.timestamp).toLocaleTimeString()}</div>
+                <div style="font-size:10px; color:#777; margin-top:3px;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
               </div>
             `
                 )
@@ -1065,14 +1132,61 @@
     renderEmployeeAll();
   }
 
+  function renderEmployeeInbox() {
+    const u = STATE.currentUser;
+    if (!u) return;
+
+    // Render inbox below employee chat form
+    let inboxEl = document.getElementById('ts-emp-inbox');
+    if (!inboxEl) {
+      inboxEl = document.createElement('div');
+      inboxEl.id = 'ts-emp-inbox';
+      inboxEl.className = 'card';
+      inboxEl.style.maxWidth = '680px';
+      inboxEl.style.margin = '20px auto';
+      const chatSec = document.getElementById('chat');
+      if (chatSec) chatSec.appendChild(inboxEl);
+    }
+    const myMsgs = STATE.messages.filter(
+      (m) => m.senderId === u.id || m.recipientId === u.id
+    );
+    inboxEl.innerHTML = `
+      <h3>Message History (${myMsgs.length})</h3>
+      <p style="font-size:12px; color:#666;">Directory: ${
+        STATE.users
+          .filter((x) => x.id !== u.id && (x.role === 'manager' || x.role === 'admin'))
+          .map((x) => `${x.name} <code>${x.email}</code> (${x.role === 'admin' ? 'Admin' : 'Manager'})`)
+          .join(' | ') || 'No managers or admins found.'
+      }</p>
+      <div class="ts-chat-thread">
+        ${
+          myMsgs.length === 0
+            ? `<div class="empty">No messages yet.</div>`
+            : myMsgs
+                .map(
+                  (m) => `
+              <div class="ts-msg ${m.senderId === u.id ? 'mine' : 'theirs'}">
+                <strong>${m.senderName} → ${m.recipientName}:</strong> ${m.text}
+                <div style="font-size:10px; color:#777;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
+              </div>
+            `
+                )
+                .join('')
+        }
+      </div>
+    `;
+  }
+
   function renderEmployeeAll() {
     const u = STATE.currentUser;
     if (!u) return;
 
     const myTasks = STATE.assignments.filter((a) => a.employeeId === u.id);
-    const myScheds = STATE.schedules.filter((s) => s.employeeId === u.id);
+    const myScheds = STATE.schedules
+      .filter((s) => s.employeeId === u.id)
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
     const myLoas = STATE.loaRequests.filter((l) => l.employeeId === u.id);
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = localISO();
     const myTodayAtt = STATE.attendance.find(
       (a) => a.employeeId === u.id && a.date === todayStr
     );
@@ -1154,6 +1268,8 @@
                 <input type="range" min="0" max="100" step="5" value="${t.progress}"
                   onchange="window.TS.empUpdateTask('${t.id}', this.value)" style="vertical-align:middle;">
                 <strong>${t.progress}%</strong>
+                <span class="ts-badge ${t.status === 'Completed' ? 'green' : t.status === 'In Progress' ? 'blue' : 'yellow'}">${t.status}</span>
+                ${t.progress < 100 ? `<button class="ts-small-btn" onclick="window.TS.empUpdateTask('${t.id}', 100)">Mark Complete</button>` : ''}
               </td>
             </tr>
           `
@@ -1187,7 +1303,7 @@
             (s) => `
           <div class="ts-list-item">
             <span><strong>${s.date}:</strong> ${s.shift} — ${s.note}</span>
-            <span class="ts-badge green">Scheduled</span>
+            <span class="ts-badge ${s.date < todayStr ? 'blue' : 'green'}">${s.date < todayStr ? 'Past' : 'Scheduled'}</span>
           </div>
         `
           )
@@ -1319,10 +1435,29 @@
     const senderNameInput = document.getElementById('sender-name');
     const senderEmailInput = document.getElementById('sender-email');
     const recipientEmailInput = document.getElementById('recipient-email');
-    if (senderNameInput) senderNameInput.value = u.name;
-    if (senderEmailInput) senderEmailInput.value = u.email;
-    if (recipientEmailInput && !recipientEmailInput.value) {
-      recipientEmailInput.value = 'manager@tasksync.com';
+    if (senderNameInput) { senderNameInput.value = u.name; senderNameInput.readOnly = true; }
+    if (senderEmailInput) { senderEmailInput.value = u.email; senderEmailInput.readOnly = true; }
+    const directory = STATE.users.filter(
+      (x) => x.id !== u.id && (x.role === 'manager' || x.role === 'admin')
+    );
+    if (recipientEmailInput) {
+      let dl = document.getElementById('ts-recipient-list');
+      if (!dl) {
+        dl = document.createElement('datalist');
+        dl.id = 'ts-recipient-list';
+        document.body.appendChild(dl);
+      }
+      dl.innerHTML = directory
+        .map((x) => `<option value="${x.email}">${x.name} (${x.role})</option>`)
+        .join('');
+      recipientEmailInput.setAttribute('list', 'ts-recipient-list');
+      if (!recipientEmailInput.value) {
+        const firstMgr =
+          directory.find((x) => x.email === 'manager@tasksync.com') ||
+          directory.find((x) => x.role === 'manager') ||
+          directory[0];
+        if (firstMgr) recipientEmailInput.value = firstMgr.email;
+      }
     }
 
     const msgForm = document.getElementById('message-form');
@@ -1354,40 +1489,7 @@
       );
     }
 
-    // Render inbox below employee chat form
-    let inboxEl = document.getElementById('ts-emp-inbox');
-    if (!inboxEl) {
-      inboxEl = document.createElement('div');
-      inboxEl.id = 'ts-emp-inbox';
-      inboxEl.className = 'card';
-      inboxEl.style.maxWidth = '680px';
-      inboxEl.style.margin = '20px auto';
-      const chatSec = document.getElementById('chat');
-      if (chatSec) chatSec.appendChild(inboxEl);
-    }
-    const myMsgs = STATE.messages.filter(
-      (m) => m.senderId === u.id || m.recipientId === u.id
-    );
-    inboxEl.innerHTML = `
-      <h3>Message History (${myMsgs.length})</h3>
-      <p style="font-size:12px; color:#666;">Directory: <code>manager@tasksync.com</code> (Manager) | <code>admin@tasksync.com</code> (Admin)</p>
-      <div class="ts-chat-thread">
-        ${
-          myMsgs.length === 0
-            ? `<div class="empty">No messages yet.</div>`
-            : myMsgs
-                .map(
-                  (m) => `
-              <div class="ts-msg ${m.senderId === u.id ? 'mine' : 'theirs'}">
-                <strong>${m.senderName} → ${m.recipientName}:</strong> ${m.text}
-                <div style="font-size:10px; color:#777;">${new Date(m.timestamp).toLocaleTimeString()}</div>
-              </div>
-            `
-                )
-                .join('')
-        }
-      </div>
-    `;
+    renderEmployeeInbox();
 
     // 6. Employee Profile, Settings & Help
     const profCard = document.querySelector('#profile .card');
@@ -1456,7 +1558,10 @@
       '#calendar-grid .calendar-day:not(.blank)'
     );
     dayCells.forEach((cell) => {
-      const dayNum = parseInt(cell.textContent, 10);
+      // The page draws the plain day number once. Remember it, because after the
+      // first decoration the cell text also contains shift and leave labels.
+      if (!cell.dataset.day) cell.dataset.day = String(parseInt(cell.textContent, 10) || '');
+      const dayNum = parseInt(cell.dataset.day, 10);
       if (!dayNum) return;
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(
         dayNum
@@ -1496,13 +1601,18 @@
   // ==================== 5. GLOBAL ACTION HANDLERS ====================
   window.TS = {
     async updateAssignmentProgress(id, progress) {
-      await api(`/api/assignments/${id}`, 'PUT', { progress: Number(progress) });
+      let failed = null;
+      try {
+        await api(`/api/assignments/${id}`, 'PUT', { progress: Number(progress) });
+      } catch (err) {
+        failed = err.message;
+      }
       await loadState(STATE.currentUser.role);
       renderAdminManagerAll(
         STATE.currentUser.role,
         STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
       );
-      showToast('Task progress updated.');
+      showToast(failed || 'Task progress updated.');
     },
     async deleteAssignment(id) {
       await api(`/api/assignments/${id}`, 'DELETE');
@@ -1634,23 +1744,100 @@
       showToast(action === 'clock-in' ? 'Clocked in!' : 'Clocked out!');
     },
     async empUpdateTask(taskId, progress) {
-      await api(`/api/assignments/${taskId}`, 'PUT', {
-        progress: Number(progress)
-      });
+      let failed = null;
+      try {
+        await api(`/api/assignments/${taskId}`, 'PUT', {
+          progress: Number(progress)
+        });
+      } catch (err) {
+        failed = err.message;
+      }
       await loadState('employee');
       renderEmployeeAll();
-      showToast(`Progress updated to ${progress}%.`);
+      showToast(failed || `Progress updated to ${progress}%.`);
     }
   };
+
+  // ==================== LOGOUT ====================
+  // Every portal has a sidebar Logout button. End the server session first,
+  // then return to the login page.
+  document.addEventListener(
+    'click',
+    async function (e) {
+      const btn = e.target.closest && e.target.closest('.nav-button');
+      if (!btn || !/logout/i.test(btn.textContent)) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      try {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      } catch (err) {}
+      try { localStorage.removeItem('tasksync_user'); } catch (err) {}
+      window.location.href = '/';
+    },
+    true
+  );
+
+  // ==================== LIVE REFRESH ====================
+  // Every few seconds, check whether anything changed on the server (a new task,
+  // a message, a status update) and refresh the screen. It never refreshes while
+  // someone is typing, so nothing they have started writing is lost.
+  function startLiveRefresh(role) {
+    const btnClass = role === 'admin' ? 'red-button' : 'green-button';
+    // A box counts as "being typed in" only if a person edited it and it still has text
+    document.addEventListener('input', function (ev) {
+      if (ev.target && ev.target.dataset) ev.target.dataset.tsTyped = '1';
+    }, true);
+    // Once a form is submitted its boxes no longer count as unfinished drafts
+    document.addEventListener('submit', function (ev) {
+      const f = ev.target;
+      if (f && f.querySelectorAll) f.querySelectorAll('[data-ts-typed]').forEach((el) => { delete el.dataset.tsTyped; });
+    }, true);
+    function hasUnsavedText() {
+      return Array.from(
+        document.querySelectorAll('input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), textarea')
+      ).some((el) => el.dataset.tsTyped === '1' && el.value !== '' && !el.closest('.topbar'));
+    }
+    setInterval(async () => {
+      if (document.hidden || !STATE.currentUser) return;
+      try {
+        const res = await fetch('/api/bootstrap', { credentials: 'same-origin' });
+        if (res.status === 401) {
+          try { localStorage.removeItem('tasksync_user'); } catch (e) {}
+          window.location.href = '/';
+          return;
+        }
+        if (!res.ok) return;
+        const data = await res.json();
+        const sig = JSON.stringify(data);
+        if (sig === STATE.sig) return;
+        if (hasUnsavedText()) return; // try again on the next check
+        const oldIds = new Set(STATE.messages.map((m) => m.id));
+        const fresh = (data.messages || []).filter(
+          (m) => !oldIds.has(m.id) && m.recipientId === STATE.currentUser.id
+        );
+        await loadState(role);
+        if (role === 'employee') renderEmployeeAll();
+        else renderAdminManagerAll(role, btnClass);
+        const thread = document.querySelector('#chat .ts-chat-thread');
+        if (thread) thread.scrollTop = thread.scrollHeight;
+        if (fresh.length) showToast('New message from ' + fresh[fresh.length - 1].senderName);
+      } catch (e) {
+        /* network hiccup: try again on the next check */
+      }
+    }, 8000);
+  }
 
   // ==================== 6. BOOTSTRAP BY PAGE ====================
   if (pathName.includes('administrator.html')) {
     initAdminOrManagerPortal('admin');
+    startLiveRefresh('admin');
   } else if (pathName.includes('manager.html')) {
     initAdminOrManagerPortal('manager');
+    startLiveRefresh('manager');
   } else if (pathName.includes('employee.html')) {
     initEmployeePortal();
+    startLiveRefresh('employee');
   } else {
     initLoginPage();
   }
-})();
+})();
