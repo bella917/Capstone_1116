@@ -203,100 +203,101 @@
 
         /* Tables */
         .table-wrap {
-            overflow-x: auto;
+            overflow-x: auto; /* Allows horizontal scrolling if the table is wider than the screen */
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
+            width: 100%;  /* Makes the table take up the full width of its container */
+            border-collapse: collapse; /* Removes spacing between table borders */
             background-color: white;
         }
 
         th, td {
             padding: 14px;
-            text-align: left;
-            border-bottom: 1px solid #e5e5e5;
+            text-align: left; /* Aligns the text to the left */
+            border-bottom: 1px solid #e5e5e5; /* Adds a thin, light gray line below each row */
         }
 
         th {
-            background-color: #7640e8;
-            color: white;
+            background-color: #7640e8; /* Sets the header background to purple */
+            color: white;  /* Makes the header text white */
         }
 
         /* Calendar */
         .calendar {
-            background-color: #f5f6fb;
+            background-color: #f5f6fb; /* Sets a light gray-purple background */
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 12px; /* Rounds the corners of the calendar */
         }
 
         .calendar-header {
-            display: flex;
+            display: flex; /* Uses Flexbox to arrange header elements horizontally */
             justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Vertically centers the header elements */
             margin-bottom: 20px;
         }
 
         .calendar-controls {
-            display: flex;
+            display: flex;  /* Arranges calendar controls horizontally */
             gap: 10px;
-            align-items: center;
+            align-items: center; /* Vertically centers the controls */
         }
 
         .calendar-controls button {
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 6px;
+            border: 1px solid #ddd; /* Adds a thin, light gray border */
+            background: white; /* Sets the button background to white */
+            border-radius: 6px; /* Slightly rounds the button corners */
             padding: 8px 12px;
             cursor: pointer;
         }
 
         .calendar-grid {
-            display: grid;
+            display: grid; /* Uses CSS Grid to organize the calendar */
             grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 5px;
         }
-
+ /*formats weekday names */
         .day-name {
-            text-align: center;
+            text-align: center; /* Centers the weekday names */
             padding: 10px 0;
             font-size: 13px;
             font-weight: bold;
         }
 
+    /* formats Individual Calendar Days */
         .calendar-day {
             min-height: 85px;
-            background-color: white;
-            border: 1px solid #eeeeee;
+            background-color: white;  /* Sets each calendar day background to white */
+            border: 1px solid #eeeeee;  /* Adds a thin, light gray border */
             border-radius: 8px;
             padding: 10px;
             font-size: 13px;
         }
 
         .calendar-day.today {
-            border: 2px solid #9857f5;
-            background: #f4edff;
+            border: 2px solid #9857f5; /* Adds a purple border around today's date */
+            background: #f4edff;  /* Gives today's date a light purple background */
         }
 
         .calendar-day.blank {
-            background: transparent;
-            border: none;
+            background: transparent; /* Makes empty calendar spaces transparent */
+            border: none; /* Removes the border from empty calendar spaces */
         }
 
         /* Progress */
         .progress-bar {
-            width: 100%;
-            background-color: #e6d8fa;
+            width: 100%; /* Makes the progress bar take up the full width of its container */
+            background-color: #e6d8fa; /* Sets the background to light purple */
             border-radius: 20px;
             height: 25px;
-            overflow: hidden;
+            overflow: hidden; /* Keeps the progress fill inside the rounded edges */
             margin: 15px 0;
         }
 
         .progress-fill {
-            height: 100%;
+            height: 100%;  /* Makes the fill take up the full height of the progress bar */
             width: 0%;
-            background-color: #8852e8;
+            background-color: #8852e8;  /* Sets the progress fill color to purple */
             border-radius: 20px;
         }
 
@@ -304,39 +305,42 @@
         .message-form {
             max-width: 480px;
             margin: 20px auto;
-            background-color: #1d2a55;
-            color: white;
+            background-color: #1d2a55; /* Sets the form background to dark navy blue */
+            color: white;  /* Makes the text inside the form white */
             padding: 30px;
             border-radius: 18px;
         }
 
         .message-form h2 {
             font-size: 28px;
-            margin-top: 0;
+            margin-top: 0; /* Removes the default top margin */
         }
 
+/* Chat Form Labels */
         .message-form label {
-            display: block;
+            display: block; /* Places each label on its own line */
             margin-top: 15px;
             margin-bottom: 6px;
             font-size: 14px;
         }
-
+/* Chat Form Input Fields and Text Area */
         .message-form input,
         .message-form textarea {
-            display: block;
+            display: block;  /* Places each input field on its own line */
             width: 100%;
             padding: 12px;
             border: none;
             border-radius: 9px;
             font-family: Arial, sans-serif;
         }
-
+        
+/* Chat Message Text Area */
         .message-form textarea {
             min-height: 100px;
-            resize: vertical;
+            resize: vertical;  /* Allows the user to resize the text area vertically */
         }
-
+        
+/* Chat Form Button */
         .message-form button {
             margin-top: 20px;
         }
@@ -348,29 +352,30 @@
             }
 
             .sidebar {
-                width: 100%;
+                width: 100%; /* Makes the sidebar take up the full screen width */
             }
 
             .content {
-                padding: 20px;
+                padding: 20px; /* Reduces the content padding to 20px */
             }
 
             .cards,
             .notification-cards {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Changes the card layouts to one column */
             }
 
             .topbar {
-                flex-wrap: wrap;
+                flex-wrap: wrap; /* Allows topbar elements to move onto another line if needed */
             }
 
             .calendar {
-                padding: 10px;
+                padding: 10px; /* Reduces the calendar's internal spacing */
+
             }
 
             .calendar-day {
-                min-height: 60px;
-                padding: 5px;
+                min-height: 60px; /* Reduces the minimum height of each calendar day */
+                padding: 5px; /* Reduces the internal spacing of each calendar day */
             }
         }
     </style>
@@ -383,6 +388,8 @@
 
     <!-- LEFT SIDE NAVIGATION MENU -->
     <div class="sidebar">
+        
+    <!-- Displays the TaskSync name at the top of the sidebar -->
 
         <div class="brand">
             ▰ TaskSync
@@ -391,63 +398,67 @@
         <!-- Dashboard -->
         <button class="nav-button active"
                 data-screen="dashboard"
-                onclick="showPage('dashboard')">
+                onclick="showPage('dashboard')">   <!-- Opens the dashboard screen when clicked -->
             ▦ Dashboard
         </button>
 
         <!-- Assignments -->
         <button class="nav-button"
                 data-screen="assignments"
-                onclick="showPage('assignments')">
+                onclick="showPage('assignments')">   <!-- Opens the assignments screen when clicked -->
             ◎ Assignments
         </button>
 
         <!-- Schedule -->
         <button class="nav-button"
                 data-screen="schedule"
-                onclick="showPage('schedule')">
+                onclick="showPage('schedule')">   <!-- Opens the schedule screen when clicked -->
             ▦ Schedule
         </button>
 
         <!-- Progress -->
         <button class="nav-button"
                 data-screen="progress"
-                onclick="showPage('progress')">
+                onclick="showPage('progress')">   <!-- Opens the progress screen when clicked -->
             ◕ Progress
         </button>
 
         <!-- Chat -->
         <button class="nav-button"
                 data-screen="chat"
-                onclick="showPage('chat')">
+                onclick="showPage('chat')">   <!-- Opens the chatbox screen when clicked -->
             ● Chat
         </button>
 
         <!-- Bottom Navigation -->
         <div class="nav-bottom">
 
+              <!-- Profile -->
             <button class="nav-button"
                     data-screen="profile"
-                    onclick="showPage('profile')">
+                    onclick="showPage('profile')">   <!-- Opens the profile screen when clicked -->
                 ♙ Profile
             </button>
 
+         <!-- settings -->
             <button class="nav-button"
                     data-screen="settings"
-                    onclick="showPage('settings')">
+                    onclick="showPage('settings')">   <!-- Opens the settings screen when clicked -->
                 ⚙ Settings
             </button>
 
+             <!-- Logout -->
             <button class="nav-button"
-                    onclick="window.location.href='index.html'">
+                    onclick="window.location.href='index.html'">   <!-- Opens the login screen when clicked -->
                 ↪ Logout
             </button>
 
             <div class="divider"></div>
 
+         <!-- help -->
             <button class="nav-button"
                     data-screen="help"
-                    onclick="showPage('help')">
+                    onclick="showPage('help')"> <!-- Opens the help and support screen when clicked -->
                 ? Help & Support
             </button>
 
@@ -462,12 +473,15 @@
         <!-- TOP BAR -->
         <div class="topbar">
 
-            <h1>Welcome Back!</h1>
+            <h1>Welcome Back!</h1>         <!-- Main welcome heading displayed at the top of the dashboard -->
 
+
+       <!-- Search bar that allows employees to search for assignments, schedules, and other information -->
             <input class="search"
                    type="search"
                    placeholder="Search assignments, schedule, etc.">
 
+    <!-- Account icons displayed in the top navigation bar -->
             <div class="account">
                 ☺ ▣
             </div>
@@ -480,37 +494,43 @@
 
             <h2>Your Dashboard</h2>
 
-            <div class="cards">
+            <div class="cards">         <!-- Grid layout containing the dashboard cards -->
 
                 <!-- Notifications -->
                 <div class="card">
 
                     <h3>Notifications</h3>
 
+                      <!-- Organizes notification cards into two columns -->
                     <div class="notification-cards">
 
                         <div class="notification-card">
                             <h3>Schedule Updates</h3>
 
+                             <!-- Placeholder text for future schedule notifications -->
                             <p>
                                 Schedule notifications
                                 will appear here.
                             </p>
 
+                             <!-- Button navigates the employee to the schedule page -->
                             <button class="purple-button"
                                     onclick="showPage('schedule')">
                                 Continue
                             </button>
                         </div>
 
+                             <!-- Assignment Notification -->
                         <div class="notification-card">
                             <h3>New Assignments</h3>
-
+                            
+                        <!-- Placeholder text for future assignment notifications -->
                             <p>
                                 Assignment notifications
                                 will appear here.
                             </p>
 
+                           <!-- Button navigates the employee to the assignments page -->
                             <button class="purple-button"
                                     onclick="showPage('assignments')">
                                 Continue
@@ -525,18 +545,22 @@
                 <div class="card">
 
                     <h3>Assignments</h3>
-
+                    
+                <!-- Donut chart displaying the total number of assignments -->
                     <div class="donut">
-                        <div class="donut-center">
+                        <div class="donut-center">  <!-- Displays the assignment count in the center of the chart -->
                             0
                         </div>
                     </div>
-
+                    
+                <!-- Placeholder displayed when no assignments are available -->
                     <div class="empty">
                         No assignments available.
                     </div>
 
                     <br>
+                    
+                <!-- Navigates the employee to the detailed assignments page -->
 
                     <button class="purple-button"
                             onclick="showPage('assignments')">
@@ -562,10 +586,12 @@
 
                     <h3>Assignment List</h3>
 
+           <!-- Wrapper allows the table to scroll horizontally if needed -->
                     <div class="table-wrap">
 
                         <table>
-
+                            
+                            <!-- Table Header -->
                             <thead>
                                 <tr>
                                     <th>Assignment</th>
@@ -577,6 +603,8 @@
 
                             <tbody>
                                 <tr>
+                                    
+                                <!-- colspan="4" makes this cell span all four columns -->
                                     <td colspan="4"
                                         style="text-align:center;">
                                         No assignments have been added yet.
@@ -600,6 +628,8 @@
                             0
                         </div>
                     </div>
+                    
+                <!-- Placeholder displayed when assignment statistics are unavailable -->
 
                     <div class="empty">
                         No assignment statistics available.
@@ -618,19 +648,24 @@
             <h2>My Schedule</h2>
 
             <div class="calendar">
+                
+            <!-- Displays the selected month, year, and navigation buttons -->
 
                 <div class="calendar-header">
 
-                    <h2 id="calendar-month">Month</h2>
+                    <h2 id="calendar-month">Month</h2>     <!-- Month name is automatically updated through JavaScript -->
 
-                    <div class="calendar-controls">
+                    <div class="calendar-controls">  <!-- Calendar navigation controls -->
 
+                   <!-- Moves the calendar to the previous month -->
                         <button onclick="changeMonth(-1)">
                             &#10094;
                         </button>
 
+                      <!-- Displays the selected calendar year -->
                         <span id="calendar-year"></span>
 
+                        <!-- Moves the calendar to the next month -->
                         <button onclick="changeMonth(1)">
                             &#10095;
                         </button>
@@ -639,6 +674,7 @@
 
                 </div>
 
+         <!-- JavaScript dynamically generates weekdays and calendar dates inside this container -->
                 <div class="calendar-grid" id="calendar-grid">
 
                     <!-- Calendar generated by JavaScript -->
@@ -653,6 +689,7 @@
 
                 <h3>Upcoming Schedule</h3>
 
+          <!-- Placeholder displayed when no shifts or events have been scheduled -->
                 <div class="empty">
                     No scheduled shifts or events have been added.
                 </div>
@@ -671,12 +708,14 @@
 
                 <h3>Assignment Completion</h3>
 
+              <!-- Displays the employee's overall assignment completion percentage -->
                 <p>Overall Progress: 0%</p>
 
-                <div class="progress-bar">
+                <div class="progress-bar">             <!-- Progress bar container -->
                     <div class="progress-fill"></div>
                 </div>
 
+   <!-- Placeholder for future assignment progress information -->
                 <div class="empty">
                     Your assignment progress will appear here
                     once assignments are added.
@@ -688,6 +727,7 @@
 
                 <h3>Completed Assignments</h3>
 
+         <!-- Placeholder displayed when no assignments have been completed -->
                 <div class="empty">
                     No completed assignments yet.
                 </div>
@@ -704,8 +744,10 @@
 
                 <h2>Send a Message Here</h2>
 
+          <!-- Form collects sender, recipient, and message information -->
                 <form id="message-form">
 
+                <!-- Sender Name Field -->
                     <label for="sender-name">
                         Your Name
                     </label>
@@ -715,6 +757,7 @@
                            name="sender-name"
                            required>
 
+                      <!-- Sender Email Field -->
                     <label for="sender-email">
                         Your Email
                     </label>
@@ -724,6 +767,7 @@
                            name="sender-email"
                            required>
 
+                     <!-- Recipient Email Field -->
                     <label for="recipient-email">
                         Recipient Email
                     </label>
@@ -733,6 +777,7 @@
                            name="recipient-email"
                            required>
 
+                      <!-- Message Text Area -->
                     <label for="message">
                         Message
                     </label>
@@ -741,6 +786,7 @@
                               name="message"
                               required></textarea>
 
+        <!-- Submits the completed message form -->
                     <button class="purple-button"
                             type="submit">
                         Submit
@@ -748,6 +794,7 @@
 
                 </form>
 
+        <!-- Displays a status message after the form is submitted -->
                 <p id="message-status"></p>
 
             </div>
@@ -764,6 +811,7 @@
 
                 <h3>Employee Information</h3>
 
+    <!-- Placeholder fields for employee profile information -->
                 <p>Name: --</p>
                 <p>Email: --</p>
                 <p>Department: --</p>
@@ -779,10 +827,13 @@
         <section id="settings" class="screen">
 
             <h2>Settings</h2>
-
-            <div class="card">
+ 
+            <div class="card">         <!-- Account Settings Card -->
 
                 <h3>Account Settings</h3>
+
+       
+                <!-- Placeholder for future account settings functionality -->
 
                 <p>
                     Account settings and preferences
@@ -795,13 +846,18 @@
 
 
         <!-- HELP AND SUPPORT -->
+
+ <!-- Provides a section where employees can access assistance and support information -->
         <section id="help" class="screen">
 
             <h2>Help & Support</h2>
 
+          <!-- Help and Support Card -->
             <div class="card">
 
                 <h3>Need Assistance?</h3>
+
+         <!-- Placeholder for future help and support resources -->
 
                 <p>
                     Help and support information
@@ -814,6 +870,7 @@
 
     </main>
 
+    <!-- Closes the Main Layout Container -->
 </div>
 
 
