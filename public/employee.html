@@ -27,16 +27,16 @@
         /* Left Side Navigation */
         .sidebar {
             width: 220px;
-            background-color: #1c1e1d;
+            background-color: #1c1e1d; /*  dark gray color */
             color: white;
             padding: 25px 15px;
             flex-shrink: 0;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Arranges sidebar items vertically */
         }
 
         .brand {
-            color: #a678f4;
+            color: #a678f4; /*  purple color */
             font-size: 21px;
             margin-bottom: 35px;
             font-weight: bold;
@@ -51,24 +51,24 @@
             background: transparent;
             border: none;
             border-radius: 20px;
-            color: #d4d4d4;
+            color: #d4d4d4; /* light gray color */
             text-align: left;
             font-size: 15px;
             cursor: pointer;
         }
-
+        /* hover button for left side nav bar */
         .nav-button:hover,
         .nav-button.active {
-            background: linear-gradient(to right, #9857f5, #39206b);
-            color: white;
+            background: linear-gradient(to right, #9857f5, #39206b);/* light purple to dark purple graident */
+            color: white; /* text color change to white */
         }
 
         .nav-bottom {
-            margin-top: auto;
+            margin-top: auto; /* margins automatically fit to sceen */
         }
 
         .divider {
-            border-top: 1px solid #39404b;
+            border-top: 1px solid #39404b; /* dark gray*/
             margin: 18px 10px;
         }
 
@@ -81,25 +81,25 @@
         }
 
         .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; /* Uses Flexbox to arrange items horizontally */
+            justify-content: space-between;/* Places items at opposite ends of the topbar */
+            align-items: center; /* Vertically centers the items */
             margin-bottom: 35px;
             gap: 20px;
         }
 
         .search {
             width: 350px;
-            max-width: 100%;
+            max-width: 100%; /* Prevents the search bar from exceeding its container width */
             padding: 12px 18px;
-            border: 1px solid #e4e4e4;
+            border: 1px solid #e4e4e4;  /* Adds a thin, light gray border */
             border-radius: 25px;
             font-size: 14px;
         }
 
         .account {
-            color: #7945c9;
-            font-size: 26px;
+            color: #7945c9;  /* Sets the account icon color to purple */
+            font-size: 26px; /* Sets the account icon size to 26px */
         }
 
         h1 {
@@ -117,30 +117,30 @@
 
         /* Screen Navigation */
         .screen {
-            display: none;
+            display: none; /* Hides all screens by default */
         }
 
         .screen.active {
-            display: block;
+            display: block; /* Displays the screen when it has the active class */
         }
 
         /* Cards */
         .cards {
-            display: grid;
+            display: grid; /* Uses CSS Grid to organize the cards */
             grid-template-columns: 2fr 1fr;
             gap: 20px;
         }
 
         .card {
-            background-color: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 16px;
+            background-color: white;  /* Sets the card background color to white */
+            border: 1px solid #e5e5e5;  /* Adds a thin, light gray border around the card */
+            border-radius: 16px; /* Rounds the corners of the card */
             padding: 24px;
             margin-bottom: 20px;
         }
 
         .notification-cards {
-            display: grid;
+            display: grid;  /* Uses CSS Grid to organize notification cards */
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-top: 25px;
@@ -154,24 +154,24 @@
         }
 
         .purple-button {
-            background: linear-gradient(to right, #9857f5, #39206b);
-            color: white;
-            border: none;
-            border-radius: 25px;
+            background: linear-gradient(to right, #9857f5, #39206b); /* Creates a gradient background transitioning from light purple to dark purple */
+            color: white; /* changes text to white */
+            border: none; /* Removes the default button border */
+            border-radius: 25px; /* Rounds the corners of the button */
             padding: 12px 24px;
             cursor: pointer;
             font-weight: bold;
         }
 
         .purple-button:hover {
-            opacity: 0.9;
+            opacity: 0.9; /* Slightly reduces the button opacity */
         }
 
         /* Empty Data Areas */
         .empty {
             padding: 35px 15px;
-            text-align: center;
-            color: #777;
+            text-align: center; /* Centers the text inside the empty area */
+            color: #777; /* Sets the text color to gray */
             border: 1px dashed #d5d5d5;
             border-radius: 12px;
             background-color: #fafafa;
@@ -184,9 +184,9 @@
             border-radius: 50%;
             background: #eee8fc;
             margin: 25px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; /* Uses Flexbox to position content inside the chart */
+            align-items: center; /* Vertically centers the content inside the chart */
+            justify-content: center;  /* Horizontally centers the content inside the chart */
         }
 
         .donut-center {
@@ -820,12 +820,15 @@
 <!-- JAVASCRIPT -->
 <script>
 
-    // Switch between employee pages
+   // Switch Between Employee Pages
+    // Function that allows employees to navigate between different dashboard screens
     function showPage(pageId) {
-
-        // Hide all screens
+        
+ // Hide All Screens
+        // Selects all HTML elements with the "screen" CSS class
         let screens = document.querySelectorAll(".screen");
 
+           // Loops through each screen and removes the active class
         screens.forEach(function(screen) {
             screen.classList.remove("active");
         });
@@ -849,6 +852,7 @@
             '.nav-button[data-screen="' + pageId + '"]'
         );
 
+        // Checks whether the matching navigation button exists
         if (selectedButton) {
             selectedButton.classList.add("active");
         }
@@ -857,46 +861,55 @@
 
 
     // Calendar
-    let currentDate = new Date();
+    let currentDate = new Date(); // Creates a Date object containing the current date and time
 
+    // Function that generates and displays the calendar
     function renderCalendar() {
 
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth();
+        let year = currentDate.getFullYear();     // Gets the current year from the date object
+        let month = currentDate.getMonth(); // Gets the current month (0 = January, 11 = December)
 
+ // Converts the month number into its full name (January, February, etc.)
         let monthName = currentDate.toLocaleDateString(
             "en-US",
             { month: "long" }
         );
 
+        // Displays the month name in the calendar heading
         document.getElementById("calendar-month").textContent =
             monthName;
 
+            // Displays the current year in the calendar heading
         document.getElementById("calendar-year").textContent =
             year;
 
+            // Retrieves the calendar grid element from the HTML page
         let calendarGrid = document.getElementById("calendar-grid");
 
-        calendarGrid.innerHTML = "";
+        calendarGrid.innerHTML = "";     // Clears the existing calendar before generating the updated one
 
+        // Creates an array containing the seven days of the week
         let weekdays = [
             "Sun", "Mon", "Tue", "Wed",
             "Thu", "Fri", "Sat"
         ];
 
+         // Loops through each weekday to create the calendar headings
         weekdays.forEach(function(day) {
 
+             // Creates a new div element for each weekday
             let dayElement = document.createElement("div");
 
-            dayElement.className = "day-name";
-            dayElement.textContent = day;
+            dayElement.className = "day-name";         // Assigns the day-name CSS class for styling
+            dayElement.textContent = day;         // Sets the text inside the element to the weekday name
 
-            calendarGrid.appendChild(dayElement);
+            calendarGrid.appendChild(dayElement);        // Adds the weekday heading to the calendar grid
 
         });
 
-        let firstDay = new Date(year, month, 1).getDay();
+        let firstDay = new Date(year, month, 1).getDay(); // Determines which day of the week the first day of the month falls on
 
+            // Calculates the total number of days in the selected month
         let daysInMonth = new Date(
             year,
             month + 1,
@@ -906,48 +919,50 @@
         // Empty boxes before first day
         for (let i = 0; i < firstDay; i++) {
 
-            let blank = document.createElement("div");
+            let blank = document.createElement("div");  // Creates an empty div element for calendar spacing
 
-            blank.className = "calendar-day blank";
+            blank.className = "calendar-day blank";  // Assigns the calendar-day and blank CSS classes
 
-            calendarGrid.appendChild(blank);
+            calendarGrid.appendChild(blank); // Adds the empty space to the calendar grid
 
         }
 
         // Generate calendar dates
-        for (let day = 1; day <= daysInMonth; day++) {
+        for (let day = 1; day <= daysInMonth; day++) { // Loops through each day of the current month
 
-            let dayElement = document.createElement("div");
+            let dayElement = document.createElement("div");     // Creates a new HTML div element for each calendar day
 
             dayElement.className = "calendar-day";
             dayElement.textContent =
-                String(day).padStart(2, "0");
+                String(day).padStart(2, "0");     // Displays the day number as text with two digits (01, 02, 03, etc.)
 
-            let today = new Date();
+            let today = new Date();     // Gets the current date from the computer's system
+
+  // Checks whether the calendar date matches today's date
 
             if (
-                day === today.getDate() &&
-                month === today.getMonth() &&
-                year === today.getFullYear()
+                day === today.getDate() && // Checks whether the day numbers match
+                month === today.getMonth() && // Checks whether the months match
+                year === today.getFullYear() // Checks whether the years match
             ) {
-                dayElement.classList.add("today");
+                dayElement.classList.add("today");         // Adds the "today" CSS class to highlight the current date
             }
 
-            calendarGrid.appendChild(dayElement);
+            calendarGrid.appendChild(dayElement);     // Adds the completed calendar day element to the calendar grid
 
         }
 
     }
 
-    // Previous / next month
+// Function to navigate to the previous or next month
     function changeMonth(amount) {
 
-        currentDate.setDate(1);
-        currentDate.setMonth(
+        currentDate.setDate(1);     // Sets the date to the first day of the current month
+        currentDate.setMonth( // Changes the month based on the amount provide
             currentDate.getMonth() + amount
         );
 
-        renderCalendar();
+        renderCalendar();     // Refreshes the calendar to display the updated month
 
     }
 
@@ -957,11 +972,13 @@
 
     // Demonstration chat form
     document.getElementById("message-form").addEventListener(
-        "submit",
+        "submit", // Adds an event listener that detects when the message form is submitted
         function(event) {
 
-            event.preventDefault();
+            event.preventDefault();         // Prevents the page from refreshing when the form is submitted
 
+                // Displays a status message confirming the form was completed
+        // Actual message sending functionality has not been connected yet
             document.getElementById("message-status").textContent =
                 "Message form completed. Sending is not connected yet.";
 
