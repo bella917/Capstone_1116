@@ -102,15 +102,15 @@
     if (!loginForm) return;
 
     // Show quick demo credentials helper below form
-    const helper = document.createElement('div');
-    helper.style.cssText = 'font-size: 12px; color: #334155; margin-top: 12px; background: #f1f5f9; padding: 10px; border-radius: 8px;';
-    helper.innerHTML = `
-      <strong>Default Logins:</strong><br>
-      Admin: <code>admin</code> / <code>admin123</code> |
-      Manager: <code>manager</code> / <code>manager123</code> |
-      Employee: <code>employee</code> / <code>employee123</code>
-    `;
-    loginForm.appendChild(helper);
+//    const helper = document.createElement('div');
+  //  helper.style.cssText = 'font-size: 12px; color: #334155; margin-top: 12px; background: #f1f5f9; padding: 10px; border-radius: 8px;';
+    //helper.innerHTML = `
+      //<strong>Default Logins:</strong><br>
+    //  Admin: <code>admin</code> / <code>admin123</code> |
+      //Manager: <code>manager</code> / <code>manager123</code> |
+ //     //Employee: <code>employee</code> / <code>employee123</code>
+   // `;
+    //loginForm.appendChild(helper);
 
     // Intercept submit in capture phase so custom employees work alongside default logins
     loginForm.addEventListener(
@@ -1840,4 +1840,4 @@
   } else {
     initLoginPage();
   }
-})();
+})();
