@@ -62,18 +62,6 @@ npm -v
 4. **Access the application in your web browser:**
    Open <http://localhost:3000>
 
-## Account Usernames & Passwords
-
-You can log in using either the **Username** or **Email** listed below:
-
-| Role | Full Name | Username | Email | Password | Portal Redirect | 
-| ----- | ----- | ----- | ----- | ----- | ----- | 
-| **Administrator** | Alex Morgan | `admin` | `admin@tasksync.com` | `admin123` | `administrator.html` | 
-| **Manager** | Jordan Taylor | `manager` | `manager@tasksync.com` | `manager123` | `manager.html` | 
-| **Employee (Default)** | Taylor Reed | `employee` | `employee@tasksync.com` | `employee123` | `employee.html` | 
-| **Employee** | Samira Chen | `schen` | `schen@tasksync.com` | `password123` | `employee.html` | 
-| **Employee** | Marcus Ross | `mross` | `mross@tasksync.com` | `password123` | `employee.html` | 
-
 ### Creating New Accounts
 
 Administrators and Managers can onboard new employees from the **My Team** tab by filling out the **Add Employee** form (including a custom username and password). Once added, that employee can immediately log in at `http://localhost:3000` using their new credentials.
