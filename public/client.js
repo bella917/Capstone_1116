@@ -29,6 +29,19 @@
     return STATE.attendance.filter((a) => a.date === t);
   }
 
+  // Unread chat helpers for the currently logged-in user
+  function getUnreadMessages() {
+    if (!STATE.currentUser) return [];
+    return STATE.messages.filter((m) => m.recipientId === STATE.currentUser.id && !m.read);
+  }
+
+  function getUnreadCountFrom(senderId) {
+    if (!STATE.currentUser) return 0;
+    return STATE.messages.filter(
+      (m) => m.recipientId === STATE.currentUser.id && m.senderId === senderId && !m.read
+    ).length;
+  }
+
   // Helper for API requests
   async function api(url, method = 'GET', body = null) {
     const opts = {
@@ -65,10 +78,15 @@
       .ts-small-btn:hover { background: #f0f0f0; }
       .ts-list-item { padding: 12px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
       .ts-list-item.active { border-color: #666; background: #f5f5f5; }
+      .ts-list-item.unread { border-left: 4px solid #dc2626; background: #fffafa; }
       .ts-chat-thread { max-height: 280px; overflow-y: auto; padding: 10px; background: #f9fafb; border-radius: 10px; border: 1px solid #eee; margin-bottom: 12px; }
       .ts-msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 13px; }
       .ts-msg.mine { background: #e8eefc; margin-left: auto; text-align: right; }
       .ts-msg.theirs { background: #ffffff; border: 1px solid #e5e5e5; }
+      .ts-msg.theirs.unread { border-left: 4px solid #dc2626; background: #fff5f5; }
+      .ts-unread-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #dc2626; color: #fff; font-size: 11px; font-weight: bold; margin-left: 8px; }
+      .ts-topbar-notif { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; background: #fee2e2; color: #991b1b; font-size: 13px; font-weight: bold; border: 1px solid #fca5a5; cursor: pointer; }
+      .ts-topbar-notif:hover { background: #fecaca; }
       .ts-toast { position: fixed; bottom: 20px; right: 20px; background: #161c27; color: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.25); z-index: 9999; font-size: 14px; }
       .calendar-day .shift-pill { display: block; margin-top: 4px; padding: 2px 5px; border-radius: 4px; background: #ede9fe; color: #5b21b6; font-size: 10px; font-weight: bold; }
       .calendar-day .loa-pill { display: block; margin-top: 4px; padding: 2px 5px; border-radius: 4px; background: #fef3c7; color: #92400e; font-size: 10px; font-weight: bold; }
@@ -86,6 +104,48 @@
     setTimeout(() => el.remove(), 3200);
   }
 
+  // Updates sidebar Chat nav button badge and topbar unread alert pill
+  function renderUnreadChatIndicators() {
+    const unread = getUnreadMessages();
+    const count = unread.length;
+
+    // 1. Sidebar Chat button badge
+    const chatNavBtn = document.querySelector('.nav-button[data-screen="chat"]');
+    if (chatNavBtn) {
+      let badge = chatNavBtn.querySelector('.ts-unread-badge');
+      if (count > 0) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'ts-unread-badge';
+          chatNavBtn.appendChild(badge);
+        }
+        badge.textContent = count;
+      } else if (badge) {
+        badge.remove();
+      }
+    }
+
+    // 2. Topbar unread notification pill
+    const topbar = document.querySelector('.topbar');
+    if (topbar) {
+      let pill = document.getElementById('ts-topbar-unread-pill');
+      if (count > 0) {
+        if (!pill) {
+          pill = document.createElement('button');
+          pill.id = 'ts-topbar-unread-pill';
+          pill.type = 'button';
+          pill.className = 'ts-topbar-notif';
+          pill.onclick = () => window.TS.openUnreadChat();
+          topbar.appendChild(pill);
+        }
+        const latestSender = unread[unread.length - 1].senderName;
+        pill.innerHTML = `✉ ${count} Unread Message${count === 1 ? '' : 's'} (latest: ${latestSender})`;
+      } else if (pill) {
+        pill.remove();
+      }
+    }
+  }
+
   // Any request that fails and is not handled on the spot shows its reason as a
   // message instead of failing silently.
   window.addEventListener('unhandledrejection', function (e) {
@@ -100,17 +160,6 @@
   function initLoginPage() {
     const loginForm = document.getElementById('loginForm');
     if (!loginForm) return;
-
-    // Show quick demo credentials helper below form
-//    const helper = document.createElement('div');
-  //  helper.style.cssText = 'font-size: 12px; color: #334155; margin-top: 12px; background: #f1f5f9; padding: 10px; border-radius: 8px;';
-    //helper.innerHTML = `
-      //<strong>Default Logins:</strong><br>
-    //  Admin: <code>admin</code> / <code>admin123</code> |
-      //Manager: <code>manager</code> / <code>manager123</code> |
- //     //Employee: <code>employee</code> / <code>employee123</code>
-   // `;
-    //loginForm.appendChild(helper);
 
     // Intercept submit in capture phase so custom employees work alongside default logins
     loginForm.addEventListener(
@@ -192,10 +241,26 @@
       });
     }
 
+    // Hook into showScreen so opening the Chat screen marks the active conversation as read
+    if (typeof window.showScreen === 'function' && !window.showScreen._tsWrapped) {
+      const origShowScreen = window.showScreen;
+      const wrapped = function (screenId) {
+        origShowScreen(screenId);
+        if (screenId === 'chat' && STATE.selectedChatPartnerId) {
+          if (getUnreadCountFrom(STATE.selectedChatPartnerId) > 0) {
+            window.TS.markConversationRead(STATE.selectedChatPartnerId);
+          }
+        }
+      };
+      wrapped._tsWrapped = true;
+      window.showScreen = wrapped;
+    }
+
     renderAdminManagerAll(role, btnClass);
   }
 
   function renderAdminManagerAll(role, btnClass) {
+    renderUnreadChatIndicators();
     renderAMDashboard(role, btnClass);
     renderAMAssignments(role, btnClass);
     renderAMTeam(role, btnClass);
@@ -224,11 +289,24 @@
       (p) => p.status !== 'Completed'
     );
     const activeAsg = STATE.assignments.filter((a) => a.status !== 'Completed');
+    const unreadMsgs = getUnreadMessages();
+    const unreadSenders = [...new Set(unreadMsgs.map((m) => m.senderName))];
 
     // Card 1: Notifications
     if (cards[0]) {
       cards[0].innerHTML = `
         <h3>Notifications</h3>
+        <div class="ts-list-item ${unreadMsgs.length > 0 ? 'unread' : ''}">
+          <span>
+            <strong>${unreadMsgs.length}</strong> Unread Chat Message(s)
+            ${
+              unreadSenders.length > 0
+                ? `<div style="font-size:12px; color:#991b1b; margin-top:2px;">From: ${unreadSenders.join(', ')}</div>`
+                : ''
+            }
+          </span>
+          <button class="ts-small-btn" onclick="window.TS.openUnreadChat()">View Chat</button>
+        </div>
         <div class="ts-list-item">
           <span><strong>${pendingLoa.length}</strong> Pending Leave of Absence Request(s)</span>
           <button class="ts-small-btn" onclick="showScreen('requests')">Review</button>
@@ -346,14 +424,14 @@
                           <td>
                             <input type="number" min="0" max="100" value="${a.progress}" style="width:65px; padding:4px;"
                               onchange="window.TS.updateAssignmentProgress('${a.id}', this.value)"> %
-                          </td><td><span class="ts-badge ${
-  a.status === 'Completed'
-    ? 'green'
-    : a.status === 'Not Started'
-    ? 'red'
-    : 'blue'
-}">${a.status}</span></td>
-                          
+                          </td>
+                          <td><span class="ts-badge ${
+                            a.status === 'Completed'
+                              ? 'green'
+                              : a.status === 'Not Started'
+                              ? 'red'
+                              : 'blue'
+                          }">${a.status}</span></td>
                           <td>
                             <button class="ts-small-btn" onclick="window.TS.deleteAssignment('${a.id}')">Delete</button>
                           </td>
@@ -783,15 +861,15 @@
             overtimeHours: 0,
             status: 'Absent / Not Clocked In'
           };
-        const badge =
-  rec.status === 'Present'
-    ? 'green'
-    : rec.status === 'Late / Tardy'
-    ? 'yellow'
-    : rec.status === 'On Leave'
-    ? 'blue'
-    : 'red';
-          
+          const badge =
+            rec.status === 'Present'
+              ? 'green'
+              : rec.status === 'Late / Tardy'
+              ? 'yellow'
+              : rec.status === 'On Leave'
+              ? 'blue'
+              : 'red';
+
           return `
             <tr>
               <td><strong>${emp.name}</strong><br><small>${emp.department}</small></td>
@@ -970,30 +1048,41 @@
 
     const contacts = STATE.users.filter((u) => u.id !== STATE.currentUser.id);
     if (!STATE.selectedChatPartnerId && contacts.length > 0) {
-      STATE.selectedChatPartnerId = contacts[0].id;
+      const firstUnread = contacts.find((c) => getUnreadCountFrom(c.id) > 0);
+      STATE.selectedChatPartnerId = (firstUnread || contacts[0]).id;
     }
     const partner = contacts.find((c) => c.id === STATE.selectedChatPartnerId);
+    const totalUnread = getUnreadMessages().length;
 
     const cards = sec.querySelectorAll('.chat-layout > .card');
     if (cards.length < 2) return;
 
-    // Left Card: Conversations List
+    // Left Card: Conversations List with per-contact unread badges
     cards[0].innerHTML = `
-      <h3>Conversations</h3>
+      <div class="ts-toolbar">
+        <h3 style="margin:0;">Conversations ${totalUnread > 0 ? `<span class="ts-unread-badge">${totalUnread}</span>` : ''}</h3>
+        ${
+          totalUnread > 0
+            ? `<button class="ts-small-btn" onclick="window.TS.markAllMessagesRead()">Mark All Read</button>`
+            : ''
+        }
+      </div>
       <div>
         ${contacts
-          .map(
-            (c) => `
-          <div class="ts-list-item ${partner && partner.id === c.id ? 'active' : ''}"
-               style="cursor:pointer;"
-               onclick="window.TS.selectChatPartner('${c.id}')">
-            <div>
-              <strong>${c.name}</strong>
-              <div style="font-size:12px; color:#666;">${c.position} (${c.email})</div>
-            </div>
-          </div>
-        `
-          )
+          .map((c) => {
+            const unreadFromContact = getUnreadCountFrom(c.id);
+            return `
+              <div class="ts-list-item ${partner && partner.id === c.id ? 'active' : ''} ${unreadFromContact > 0 ? 'unread' : ''}"
+                   style="cursor:pointer;"
+                   onclick="window.TS.selectChatPartner('${c.id}')">
+                <div>
+                  <strong>${c.name}</strong>
+                  <div style="font-size:12px; color:#666;">${c.position} (${c.email})</div>
+                </div>
+                ${unreadFromContact > 0 ? `<span class="ts-unread-badge">${unreadFromContact}</span>` : ''}
+              </div>
+            `;
+          })
           .join('')}
       </div>
     `;
@@ -1014,14 +1103,17 @@
           thread.length === 0
             ? `<div class="empty">No messages with ${partner ? partner.name : 'this user'} yet. Say hello!</div>`
             : thread
-                .map(
-                  (m) => `
-              <div class="ts-msg ${m.senderId === STATE.currentUser.id ? 'mine' : 'theirs'}">
-                <strong>${m.senderName}:</strong> ${m.text}
-                <div style="font-size:10px; color:#777; margin-top:3px;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
-              </div>
-            `
-                )
+                .map((m) => {
+                  const isMine = m.senderId === STATE.currentUser.id;
+                  const isUnread = !isMine && !m.read;
+                  return `
+                    <div class="ts-msg ${isMine ? 'mine' : 'theirs'} ${isUnread ? 'unread' : ''}">
+                      <strong>${m.senderName}:</strong> ${m.text}
+                      ${isUnread ? `<span class="ts-badge red" style="margin-left:6px;">New</span>` : ''}
+                      <div style="font-size:10px; color:#777; margin-top:3px;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
+                    </div>
+                  `;
+                })
                 .join('')
         }
       </div>
@@ -1043,8 +1135,11 @@
           recipientId: partner.id,
           text
         });
+        if (getUnreadCountFrom(partner.id) > 0) {
+          await api('/api/messages/read', 'PUT', { senderId: partner.id });
+        }
         await loadState(role);
-        renderAMChat(role, btnClass);
+        renderAdminManagerAll(role, btnClass);
       });
     }
   }
@@ -1159,8 +1254,20 @@
     const myMsgs = STATE.messages.filter(
       (m) => m.senderId === u.id || m.recipientId === u.id
     );
+    const unreadCount = getUnreadMessages().length;
+
     inboxEl.innerHTML = `
-      <h3>Message History (${myMsgs.length})</h3>
+      <div class="ts-toolbar">
+        <h3 style="margin:0;">
+          Message History (${myMsgs.length})
+          ${unreadCount > 0 ? `<span class="ts-unread-badge">${unreadCount} Unread</span>` : ''}
+        </h3>
+        ${
+          unreadCount > 0
+            ? `<button class="ts-small-btn" onclick="window.TS.markAllMessagesRead()">Mark All Read</button>`
+            : ''
+        }
+      </div>
       <p style="font-size:12px; color:#666;">Directory: ${
         STATE.users
           .filter((x) => x.id !== u.id && (x.role === 'manager' || x.role === 'admin'))
@@ -1172,14 +1279,28 @@
           myMsgs.length === 0
             ? `<div class="empty">No messages yet.</div>`
             : myMsgs
-                .map(
-                  (m) => `
-              <div class="ts-msg ${m.senderId === u.id ? 'mine' : 'theirs'}">
-                <strong>${m.senderName} → ${m.recipientName}:</strong> ${m.text}
-                <div style="font-size:10px; color:#777;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
-              </div>
-            `
-                )
+                .map((m) => {
+                  const isMine = m.senderId === u.id;
+                  const isUnread = !isMine && !m.read;
+                  return `
+                    <div class="ts-msg ${isMine ? 'mine' : 'theirs'} ${isUnread ? 'unread' : ''}">
+                      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <span>
+                          <strong>${m.senderName} → ${m.recipientName}:</strong> ${m.text}
+                        </span>
+                        ${
+                          isUnread
+                            ? `<span style="white-space:nowrap;">
+                                 <span class="ts-badge red">Unread</span>
+                                 <button class="ts-small-btn" style="margin-left:4px;" onclick="window.TS.markMessageRead('${m.id}')">Mark Read</button>
+                               </span>`
+                            : ''
+                        }
+                      </div>
+                      <div style="font-size:10px; color:#777;">${new Date(m.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</div>
+                    </div>
+                  `;
+                })
                 .join('')
         }
       </div>
@@ -1190,6 +1311,8 @@
     const u = STATE.currentUser;
     if (!u) return;
 
+    renderUnreadChatIndicators();
+
     const myTasks = STATE.assignments.filter((a) => a.employeeId === u.id);
     const myScheds = STATE.schedules
       .filter((s) => s.employeeId === u.id)
@@ -1199,8 +1322,10 @@
     const myTodayAtt = STATE.attendance.find(
       (a) => a.employeeId === u.id && a.date === todayStr
     );
+    const unreadMsgs = getUnreadMessages();
 
     // 1. Employee Dashboard
+    const notifContainer = document.querySelector('#dashboard .notification-cards');
     const notifCards = document.querySelectorAll('#dashboard .notification-card');
     if (notifCards[0]) {
       notifCards[0].innerHTML = `
@@ -1227,6 +1352,39 @@
           myTasks.length - pendingCount
         }</strong> completed assignment(s).</p>
         <button class="purple-button" onclick="showPage('assignments')">Continue</button>
+      `;
+    }
+
+    if (notifContainer) {
+      let chatNotifCard = document.getElementById('ts-emp-chat-notif-card');
+      if (!chatNotifCard) {
+        chatNotifCard = document.createElement('div');
+        chatNotifCard.id = 'ts-emp-chat-notif-card';
+        chatNotifCard.className = 'notification-card';
+        chatNotifCard.style.gridColumn = '1 / -1';
+        notifContainer.appendChild(chatNotifCard);
+      }
+      const latestUnread = unreadMsgs[unreadMsgs.length - 1];
+      chatNotifCard.style.borderColor = unreadMsgs.length > 0 ? '#dc2626' : '#e5e5e5';
+      chatNotifCard.style.background = unreadMsgs.length > 0 ? '#fffafa' : '#ffffff';
+      chatNotifCard.innerHTML = `
+        <h3>
+          Chat Notifications
+          ${unreadMsgs.length > 0 ? `<span class="ts-unread-badge">${unreadMsgs.length}</span>` : ''}
+        </h3>
+        <p>${
+          unreadMsgs.length > 0
+            ? `You have <strong>${unreadMsgs.length}</strong> unread chat message(s). Latest from <strong>${latestUnread.senderName}</strong>: "${latestUnread.text}"`
+            : 'You have no unread chat messages.'
+        }</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="purple-button" onclick="showPage('chat')">Open Chat</button>
+          ${
+            unreadMsgs.length > 0
+              ? `<button class="ts-small-btn" onclick="window.TS.markAllMessagesRead()">Mark All Read</button>`
+              : ''
+          }
+        </div>
       `;
     }
 
@@ -1478,13 +1636,17 @@
           event.preventDefault();
           event.stopImmediatePropagation();
           try {
-            await api('/api/messages', 'POST', {
+            const recEmail = document.getElementById('recipient-email').value;
+            const sent = await api('/api/messages', 'POST', {
               senderId: u.id,
               senderName: document.getElementById('sender-name').value,
               senderEmail: document.getElementById('sender-email').value,
-              recipientEmail: document.getElementById('recipient-email').value,
+              recipientEmail: recEmail,
               text: document.getElementById('message').value
             });
+            if (sent && sent.recipientId && getUnreadCountFrom(sent.recipientId) > 0) {
+              await api('/api/messages/read', 'PUT', { senderId: sent.recipientId });
+            }
             document.getElementById('message').value = '';
             document.getElementById('message-status').textContent =
               'Message sent!';
@@ -1567,8 +1729,6 @@
       '#calendar-grid .calendar-day:not(.blank)'
     );
     dayCells.forEach((cell) => {
-      // The page draws the plain day number once. Remember it, because after the
-      // first decoration the cell text also contains shift and leave labels.
       if (!cell.dataset.day) cell.dataset.day = String(parseInt(cell.textContent, 10) || '');
       const dayNum = parseInt(cell.dataset.day, 10);
       if (!dayNum) return;
@@ -1736,12 +1896,67 @@
       renderAdminManagerAll('admin', 'red-button');
       showToast('Report deleted.');
     },
-    selectChatPartner(userId) {
+    async selectChatPartner(userId) {
       STATE.selectedChatPartnerId = userId;
-      renderAMChat(
+      if (getUnreadCountFrom(userId) > 0) {
+        await api('/api/messages/read', 'PUT', { senderId: userId });
+        await loadState(STATE.currentUser.role);
+      }
+      renderAdminManagerAll(
         STATE.currentUser.role,
         STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
       );
+    },
+    async markConversationRead(senderId) {
+      await api('/api/messages/read', 'PUT', { senderId });
+      await loadState(STATE.currentUser.role);
+      if (STATE.currentUser.role === 'employee') renderEmployeeAll();
+      else {
+        renderAdminManagerAll(
+          STATE.currentUser.role,
+          STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
+        );
+      }
+    },
+    async markMessageRead(messageId) {
+      await api('/api/messages/read', 'PUT', { messageId });
+      await loadState(STATE.currentUser.role);
+      if (STATE.currentUser.role === 'employee') renderEmployeeAll();
+      else {
+        renderAdminManagerAll(
+          STATE.currentUser.role,
+          STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
+        );
+      }
+    },
+    async markAllMessagesRead() {
+      await api('/api/messages/read', 'PUT', { all: true });
+      await loadState(STATE.currentUser.role);
+      if (STATE.currentUser.role === 'employee') renderEmployeeAll();
+      else {
+        renderAdminManagerAll(
+          STATE.currentUser.role,
+          STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
+        );
+      }
+      showToast('All messages marked as read.');
+    },
+    async openUnreadChat() {
+      const unread = getUnreadMessages();
+      if (STATE.currentUser.role === 'employee') {
+        if (typeof showPage === 'function') showPage('chat');
+      } else {
+        if (unread.length > 0) {
+          STATE.selectedChatPartnerId = unread[unread.length - 1].senderId;
+          await api('/api/messages/read', 'PUT', { senderId: STATE.selectedChatPartnerId });
+          await loadState(STATE.currentUser.role);
+        }
+        renderAdminManagerAll(
+          STATE.currentUser.role,
+          STATE.currentUser.role === 'admin' ? 'red-button' : 'green-button'
+        );
+        if (typeof showScreen === 'function') showScreen('chat');
+      }
     },
     async empClock(action) {
       await api('/api/attendance', 'POST', {
