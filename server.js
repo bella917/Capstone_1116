@@ -299,7 +299,8 @@ function initDatabase() {
           recipientName: 'Taylor Reed',
           recipientEmail: 'employee@tasksync.com',
           text: 'Hi Taylor, great progress on the onboarding documentation! Let me know if you need anything for the Q4 API audit.',
-          timestamp: new Date(Date.now() - 3600000 * 3).toISOString()
+          timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
+          read: false
         },
         {
           id: 'msg-2',
@@ -310,7 +311,8 @@ function initDatabase() {
           recipientName: 'Jordan Taylor',
           recipientEmail: 'manager@tasksync.com',
           text: 'Thanks Jordan! I am 65% through the API audit and on track for the due date.',
-          timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
+          timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
+          read: false
         },
         {
           id: 'msg-3',
@@ -321,7 +323,8 @@ function initDatabase() {
           recipientName: 'Jordan Taylor',
           recipientEmail: 'manager@tasksync.com',
           text: 'Hi Jordan, please review the pending Q4 performance drafts and LOA requests by Friday.',
-          timestamp: new Date(Date.now() - 3600000).toISOString()
+          timestamp: new Date(Date.now() - 3600000).toISOString(),
+          read: false
         }
       ]
     };
@@ -476,6 +479,12 @@ function migrateDatabase() {
   db.assignments.forEach((a) => {
     if (a.status === 'Pending') {
       a.status = TASK_STATUS.NOT_STARTED;
+      changed = true;
+    }
+  });
+  (db.messages || []).forEach((m) => {
+    if (typeof m.read !== 'boolean') {
+      m.read = false;
       changed = true;
     }
   });
@@ -1171,12 +1180,37 @@ app.post('/api/messages', requireAuth(), (req, res) => {
     recipientName: recipient.name,
     recipientEmail: recipient.email,
     text: text.trim(),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    read: false
   };
 
   db.messages.push(msg);
   writeDB(db);
   res.status(201).json(msg);
+});
+
+app.put('/api/messages/read', requireAuth(), (req, res) => {
+  const db = req.db;
+  const me = req.user;
+  const { senderId, messageId, all } = req.body || {};
+  let updated = 0;
+
+  db.messages.forEach((m) => {
+    if (m.recipientId !== me.id || m.read) return;
+    if (messageId && m.id === messageId) {
+      m.read = true;
+      updated += 1;
+    } else if (senderId && m.senderId === senderId) {
+      m.read = true;
+      updated += 1;
+    } else if (all || (!messageId && !senderId)) {
+      m.read = true;
+      updated += 1;
+    }
+  });
+
+  if (updated > 0) writeDB(db);
+  res.json({ success: true, updated });
 });
 
 // ==================== FRONT-END HTML & ASSET SERVING ====================
