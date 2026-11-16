@@ -8,6 +8,7 @@
     <title>TaskSync Login Page</title>
 
     <style>
+
         /* Main page formatting */
         * {
             box-sizing: border-box;
@@ -88,6 +89,12 @@
             background-color: #FDECEC;
         }
 
+        /* Keep invalid highlighting when field is selected */
+        input.invalid:focus {
+            border: 2px solid #DC5252;
+            background-color: #FDECEC;
+        }
+
         /* Inline error notification */
         .error-banner {
             display: none;
@@ -157,6 +164,7 @@
 
         /* Adjustments for smaller screens */
         @media screen and (max-width: 550px) {
+
             .login-card {
                 width: 95%;
                 margin: 20px auto;
@@ -172,6 +180,7 @@
                 height: 170px;
             }
         }
+
     </style>
 </head>
 
@@ -192,10 +201,11 @@
         >
 
         <!-- Login form -->
-        <form id="loginForm">
+        <form id="loginForm" novalidate>
 
             <!-- Username -->
             <label for="username">Username:</label>
+
             <input
                 type="text"
                 id="username"
@@ -206,6 +216,7 @@
 
             <!-- Password -->
             <label for="password">Password:</label>
+
             <input
                 type="password"
                 id="password"
@@ -223,7 +234,12 @@
         </form>
 
         <!-- Inline error notification -->
-        <div id="loginError" class="error-banner">
+        <div
+            id="loginError"
+            class="error-banner"
+            role="alert"
+            aria-live="assertive"
+        >
 
             <div class="error-title">
                 <span>⚠</span> Authentication Error
@@ -258,17 +274,16 @@
             // Prevents the form from refreshing the page
             event.preventDefault();
 
+            // Get the username and password entered by the user
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
             // Hide any previous error notification
             loginError.style.display = "none";
 
             // Remove red highlighting from previous attempts
             usernameInput.classList.remove("invalid");
             passwordInput.classList.remove("invalid");
-
-
-            // Get the username and password entered by the user
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
 
 
             // Administrator login
