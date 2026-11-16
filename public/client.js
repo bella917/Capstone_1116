@@ -346,8 +346,14 @@
                           <td>
                             <input type="number" min="0" max="100" value="${a.progress}" style="width:65px; padding:4px;"
                               onchange="window.TS.updateAssignmentProgress('${a.id}', this.value)"> %
-                          </td>
-                          <td><span class="ts-badge ${a.status === 'Completed' ? 'green' : 'blue'}">${a.status}</span></td>
+                          </td><td><span class="ts-badge ${
+  a.status === 'Completed'
+    ? 'green'
+    : a.status === 'Not Started'
+    ? 'red'
+    : 'blue'
+}">${a.status}</span></td>
+                          
                           <td>
                             <button class="ts-small-btn" onclick="window.TS.deleteAssignment('${a.id}')">Delete</button>
                           </td>
