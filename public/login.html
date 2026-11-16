@@ -9,9 +9,9 @@
 
         /* Overall Page */
         body {
-            background-color: #E9EDF3; /*white color */
-            font-family: Arial, sans-serif; /* font */
-            text-align: center; /* text automatically aligns to front */
+            background-color: #E9EDF3;
+            font-family: Arial, sans-serif;
+            text-align: center;
             margin: 0;
         }
 
@@ -50,7 +50,7 @@
             font-size: 16px;
             padding: 12px;
             width: 85%;
-            border: 1px solid #CBD5E1;/* light gray */
+            border: 1px solid #CBD5E1;
             border-radius: 8px;
             outline: none;
             box-sizing: border-box;
@@ -84,8 +84,42 @@
 
         /* Button Hover Effect */
         button:hover {
-            background-color: #4169A1; /* blue color */
+            background-color: #4169A1;
             transform: scale(1.05);
+        }
+
+        /* Login Error Banner */
+        .error-banner {
+            display: none;
+            background-color: #FDECEC;
+            border: 1px solid #F5B5B5;
+            border-left: 4px solid #DC5252;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin: 15px auto 0;
+            width: 85%;
+            box-sizing: border-box;
+            color: #912018;
+            font-family: Arial, sans-serif;
+            text-align: left;
+        }
+
+        /* Error Banner Heading */
+        .error-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .error-title span {
+            margin-right: 6px;
+        }
+
+        /* Error Banner Message */
+        .error-banner p {
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
         }
 
         /* IT Department Footer */
@@ -96,8 +130,21 @@
             width: 100%;
             text-align: center;
             color: navy;
-            background-color: #E9EDF3; 
+            background-color: #E9EDF3;
             padding: 5px 0;
+        }
+
+        /* Smaller Screen Support */
+        @media (max-width: 550px) {
+            .login-card {
+                width: 90%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
         }
 
     </style>
@@ -114,7 +161,7 @@
         <h4>Please enter your credentials below</h4>
 
         <!-- Company Logo -->
-        <img src="TaskSync Blue Gradient Logo.png" 
+        <img src="TaskSync Blue Gradient Logo.png"
              alt="TaskSync Logo"
              class="logo">
 
@@ -123,7 +170,7 @@
         <!-- Login Form -->
         <form id="loginForm">
 
-            <!-- username textbox -->
+            <!-- Username Textbox -->
             <label for="username">Username:</label>
 
             <input type="text"
@@ -133,8 +180,8 @@
                    required>
 
             <br><br>
-            
-            <!-- password textbox -->
+
+            <!-- Password Textbox -->
             <label for="password">Password:</label>
 
             <input type="password"
@@ -145,17 +192,28 @@
 
             <br><br>
 
-            <!-- login button -->
+            <!-- Login Button -->
             <button type="submit">
                 Login
             </button>
 
-         <!-- submit button -->
+            <!-- Clear Button -->
             <button type="reset">
                 Clear
             </button>
 
         </form>
+
+        <!-- Invalid Login Error Message -->
+        <div id="loginError" class="error-banner">
+
+            <div class="error-title">
+                <span>⚠</span> Authentication Error
+            </div>
+
+            <p>Invalid username or password. Please try again.</p>
+
+        </div>
 
     </div>
 
@@ -169,51 +227,59 @@
     <!-- Login Navigation -->
     <script>
 
-            // Waits for the user to submit the login form
+        // Waits for the user to submit the login form
         document.getElementById("loginForm").addEventListener("submit", function(event) {
 
-       // Prevents the page from refreshing when the form is submitted
+            // Prevents the page from refreshing when the form is submitted
             event.preventDefault();
 
-        // Retrieves the username and password entered by the user
+            // Hides the previous error message when trying again
+            document.getElementById("loginError").style.display = "none";
+
+            // Retrieves the username and password entered by the user
             let username = document.getElementById("username").value;
             let password = document.getElementById("password").value;
 
-            //test admin login
+            // Test admin login
             if (username === "admin" && password === "admin123") {
 
                 window.location.href = "administrator.html";
 
             }
-            //test manager login
+
+            // Test manager login
             else if (username === "manager" && password === "manager123") {
 
                 window.location.href = "manager.html";
 
             }
 
-                // test employee login
+            // Test employee login
             else if (username === "employee" && password === "employee123") {
 
                 window.location.href = "employee.html";
 
             }
 
-                // error message if invalid login
+            // Error message if invalid login
             else {
 
-                alert("Invalid username or password.");
+                document.getElementById("loginError").style.display = "block";
 
             }
+
+        });
+
+
+        // Hides the error message when the Clear button is selected
+        document.getElementById("loginForm").addEventListener("reset", function() {
+
+            document.getElementById("loginError").style.display = "none";
 
         });
 
     </script>
 
 </body>
+
 </html>
-
-
-
-
-  
