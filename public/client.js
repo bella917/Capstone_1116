@@ -783,12 +783,15 @@
             overtimeHours: 0,
             status: 'Absent / Not Clocked In'
           };
-          const badge =
-            rec.status === 'Present'
-              ? 'green'
-              : rec.status === 'Late / Tardy'
-              ? 'yellow'
-              : 'red';
+        const badge =
+  rec.status === 'Present'
+    ? 'green'
+    : rec.status === 'Late / Tardy'
+    ? 'yellow'
+    : rec.status === 'On Leave'
+    ? 'blue'
+    : 'red';
+          
           return `
             <tr>
               <td><strong>${emp.name}</strong><br><small>${emp.department}</small></td>
