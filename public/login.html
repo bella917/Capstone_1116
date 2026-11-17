@@ -268,60 +268,36 @@
         const loginError = document.getElementById("loginError");
 
 
-        // Runs when the user clicks Login
+        // Logging in is handled by the server (client.js sends the username and
+        // password to /api/auth/login). Nothing about who may log in lives in this
+        // page, so there are no passwords in the page source.
+        // This listener only stops the browser from submitting the form by itself
+        // (which would put the password in the web address) if client.js is missing.
         loginForm.addEventListener("submit", function(event) {
 
-            // Prevents the form from refreshing the page
             event.preventDefault();
 
-            // Get the username and password entered by the user
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
-
-            // Hide any previous error notification
-            loginError.style.display = "none";
-
-            // Remove red highlighting from previous attempts
-            usernameInput.classList.remove("invalid");
-            passwordInput.classList.remove("invalid");
-
-
-            // Administrator login
-            if (username === "admin" && password === "admin123") {
-
-                window.location.href = "administrator.html";
-
-            }
-
-            // Manager login
-            else if (username === "manager" && password === "manager123") {
-
-                window.location.href = "manager.html";
-
-            }
-
-            // Employee login
-            else if (username === "employee" && password === "employee123") {
-
-                window.location.href = "employee.html";
-
-            }
-
-            // Invalid login information
-            else {
-
-                // Display the inline red error notification
-                loginError.style.display = "block";
-
-                // Highlight the username field in red
-                usernameInput.classList.add("invalid");
-
-                // Highlight the password field in red
-                passwordInput.classList.add("invalid");
-
-            }
-
         });
+
+
+        // Called by client.js when the server rejects a login.
+        // Shows the red notification and highlights both fields.
+        window.showLoginError = function(message) {
+
+            // Show the server's message (wrong password, too many attempts, ...)
+            const text = loginError.querySelector("p");
+            if (text && message) {
+                text.textContent = message;
+            }
+
+            // Display the inline red error notification
+            loginError.style.display = "block";
+
+            // Highlight the username and password fields in red
+            usernameInput.classList.add("invalid");
+            passwordInput.classList.add("invalid");
+
+        };
 
 
         // Runs when the user clicks Clear

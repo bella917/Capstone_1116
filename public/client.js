@@ -171,6 +171,11 @@
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
 
+        // Clear the red error state left by a previous attempt
+        const banner = document.getElementById('loginError');
+        if (banner) banner.style.display = 'none';
+        document.querySelectorAll('#loginForm input.invalid').forEach((el) => el.classList.remove('invalid'));
+
         try {
           const result = await api('/api/auth/login', 'POST', {
             username,
@@ -184,7 +189,10 @@
           localStorage.setItem('tasksync_user', JSON.stringify(result.user));
           window.location.href = result.redirect;
         } catch (err) {
-          alert(err.message || 'Invalid username or password.');
+          const msg = err.message || 'Invalid username or password.';
+          // Use the page's red error notification when it has one, otherwise a pop-up
+          if (typeof window.showLoginError === 'function') window.showLoginError(msg);
+          else alert(msg);
         }
       },
       true
