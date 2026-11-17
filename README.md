@@ -64,7 +64,7 @@ npm -v
 
 ### Creating New Accounts
 
-Administrators and Managers can onboard new employees from the **My Team** tab by filling out the **Add Employee** form (including a custom username and password). Once added, that employee can immediately log in at `http://localhost:3000` using their new credentials.
+Only Administrators can onboard new employees (from the **My Team** tab, using the **Add Employee** form with a custom username and password) or offboard them (**Remove**). Managers cannot add or remove people. Once added, that employee can immediately log in at `http://localhost:3000` using their new credentials.
 
 ## Features by Portal
 

@@ -623,7 +623,8 @@ app.get('/api/bootstrap', requireAuth(), (req, res) => {
 });
 
 // 3. Employees / Users CRUD
-app.post('/api/employees', requireAuth('admin', 'manager'), (req, res) => {
+// Onboarding (creating accounts) is admin-only. Managers cannot add people.
+app.post('/api/employees', requireAuth('admin'), (req, res) => {
   const db = req.db;
   const b = req.body || {};
   const { name, email, phone, department, position, workType, birthday, joinDate, shift } = b;
@@ -649,7 +650,7 @@ app.post('/api/employees', requireAuth('admin', 'manager'), (req, res) => {
     return res.status(400).json({ error: 'Password must be at least 6 characters.' });
   }
 
-  // Only an admin may create managers or admins; managers can only onboard employees.
+  // Only an admin reaches this route; an admin may create employees, managers or admins.
   let role = 'employee';
   if (b.role && b.role !== 'employee') {
     if (req.user.role !== 'admin' || !ROLES.includes(b.role)) {
