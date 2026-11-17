@@ -485,6 +485,7 @@
         <h3>Employee Directory (${employees.length})</h3>
       </div>
 
+      ${role === 'admin' ? `
       <form id="ts-add-employee-form" class="ts-form-grid">
         <div>
           <label>Full Name</label>
@@ -531,6 +532,7 @@
           <button type="submit" class="${btnClass}" style="width:100%;">+ Add Employee</button>
         </div>
       </form>
+      ` : ''}
 
       <div class="table-wrap">
         <table>
