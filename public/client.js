@@ -51,7 +51,7 @@
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(url, { ...opts, credentials: 'same-origin' });
     const data = await res.json().catch(() => ({}));
-    if (res.status === 401 && !url.includes('/api/auth/login')) {
+    if (res.status === 401 && !url.includes('/api/auth/login') && !url.includes('/api/auth/verify-2fa')) {
       // Session ended or never started: go back to the login page
       try { localStorage.removeItem('tasksync_user'); } catch (e) {}
       window.location.href = '/';
@@ -172,18 +172,131 @@
         const password = document.getElementById('password').value;
 
         try {
-          const { user, redirect } = await api('/api/auth/login', 'POST', {
+          const result = await api('/api/auth/login', 'POST', {
             username,
             password
           });
-          localStorage.setItem('tasksync_user', JSON.stringify(user));
-          window.location.href = redirect;
+          // Two-step verification is on for this account: ask for the 6-digit code
+          if (result.twoFactorRequired) {
+            showCodePrompt(loginForm, result.challenge);
+            return;
+          }
+          localStorage.setItem('tasksync_user', JSON.stringify(result.user));
+          window.location.href = result.redirect;
         } catch (err) {
           alert(err.message || 'Invalid username or password.');
         }
       },
       true
     );
+  }
+
+  // Step 2 of login: replaces the username/password form with a code box.
+  function showCodePrompt(loginForm, challenge) {
+    const box = document.createElement('div');
+    box.id = 'ts-code-prompt';
+    box.innerHTML = `
+      <h3 style="margin:0 0 8px;">Two-Step Verification</h3>
+      <p style="margin:0 0 12px;font-size:14px;">Enter the 6-digit code from your authenticator app.</p>
+      <input type="text" id="ts-code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" style="width:100%;padding:10px;font-size:18px;letter-spacing:4px;text-align:center;box-sizing:border-box;">
+      <p id="ts-code-error" role="alert" style="color:#b91c1c;font-size:13px;min-height:18px;margin:8px 0;"></p>
+      <button type="button" id="ts-code-verify" style="width:100%;">Verify</button>
+      <button type="button" id="ts-code-cancel" style="width:100%;margin-top:8px;">Back to login</button>
+    `;
+    loginForm.style.display = 'none';
+    loginForm.parentNode.insertBefore(box, loginForm.nextSibling);
+    const input = box.querySelector('#ts-code-input');
+    const err = box.querySelector('#ts-code-error');
+    input.focus();
+
+    async function verify() {
+      err.textContent = '';
+      try {
+        const { user, redirect } = await api('/api/auth/verify-2fa', 'POST', { challenge, code: input.value });
+        localStorage.setItem('tasksync_user', JSON.stringify(user));
+        window.location.href = redirect;
+      } catch (e) {
+        err.textContent = e.message || 'That code is not correct.';
+        input.value = '';
+        input.focus();
+      }
+    }
+    box.querySelector('#ts-code-verify').addEventListener('click', verify);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') verify(); });
+    box.querySelector('#ts-code-cancel').addEventListener('click', () => {
+      box.remove();
+      loginForm.style.display = '';
+      const pw = document.getElementById('password');
+      if (pw) pw.value = '';
+    });
+  }
+
+  // Settings panel for two-step verification (used by every role).
+  // Appended under the Account Settings form.
+  function renderTwoFactorBox(card, btnClass, rerender) {
+    const u = STATE.currentUser;
+    if (!card || !u) return;
+    const old = card.querySelector('#ts-2fa-box');
+    if (old) old.remove();
+    const box = document.createElement('div');
+    box.id = 'ts-2fa-box';
+    box.style.marginTop = '24px';
+    card.appendChild(box);
+
+    if (u.twoFactorEnabled) {
+      box.innerHTML = `
+        <h3>Two-Step Verification</h3>
+        <p><span class="ts-badge green">On</span> A 6-digit code from your authenticator app is required every time you log in.</p>
+        <form id="ts-2fa-off-form" class="ts-form-grid">
+          <div><label>Your Password</label><input type="password" name="password" required></div>
+          <div><label>Current 6-Digit Code</label><input type="text" name="code" inputmode="numeric" maxlength="6" required></div>
+          <div style="display:flex; align-items:flex-end;"><button type="submit" class="${btnClass}" style="width:100%;">Turn Off</button></div>
+        </form>`;
+      box.querySelector('#ts-2fa-off-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = Object.fromEntries(new FormData(e.target).entries());
+        try {
+          await api('/api/auth/2fa/disable', 'POST', fd);
+          u.twoFactorEnabled = false;
+          showToast('Two-step verification is off.');
+          rerender();
+        } catch (err) { alert(err.message); }
+      });
+      return;
+    }
+
+    box.innerHTML = `
+      <h3>Two-Step Verification</h3>
+      <p><span class="ts-badge yellow">Off</span> Add a second step to your login using an authenticator app (Google Authenticator, Microsoft Authenticator, Authy).</p>
+      <button type="button" id="ts-2fa-start" class="${btnClass}">Set Up Two-Step Verification</button>
+      <div id="ts-2fa-setup"></div>`;
+    box.querySelector('#ts-2fa-start').addEventListener('click', async (ev) => {
+      try {
+        const { secret, uri } = await api('/api/auth/2fa/setup', 'POST', {});
+        ev.target.style.display = 'none';
+        const setup = box.querySelector('#ts-2fa-setup');
+        setup.innerHTML = `
+          <ol style="line-height:1.7;">
+            <li>Open your authenticator app and choose <strong>Add account</strong>, then <strong>Enter a setup key</strong>.</li>
+            <li>Type this key: <code style="font-size:15px;user-select:all;">${secret}</code> (account name: TaskSync, type: time-based).</li>
+            <li>Enter the 6-digit code the app shows to finish.</li>
+          </ol>
+          <form id="ts-2fa-on-form" class="ts-form-grid">
+            <div><label>6-Digit Code</label><input type="text" name="code" inputmode="numeric" maxlength="6" required></div>
+            <div style="display:flex; align-items:flex-end;"><button type="submit" class="${btnClass}" style="width:100%;">Turn On</button></div>
+          </form>`;
+        setup.querySelector('#ts-2fa-on-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fd = Object.fromEntries(new FormData(e.target).entries());
+          try {
+            await api('/api/auth/2fa/enable', 'POST', fd);
+            u.twoFactorEnabled = true;
+            showToast('Two-step verification is on.');
+            rerender();
+          } catch (err) { alert(err.message); }
+        });
+      } catch (err) { alert(err.message); }
+    });
   }
 
   // ==================== 2. SHARED DATA LOADER ====================
@@ -566,6 +679,11 @@
                       ${
                         role === 'admin'
                           ? `<button class="ts-small-btn" onclick="window.TS.removeEmployee('${e.id}')">Remove</button>`
+                          : ''
+                      }
+                      ${
+                        role === 'admin' && e.twoFactorEnabled
+                          ? `<button class="ts-small-btn" title="Lost phone? Turn off this person's two-step verification" onclick="window.TS.resetTwoFactor('${e.id}')">Reset 2-Step</button>`
                           : ''
                       }
                     </td>
@@ -1195,6 +1313,7 @@
           showToast('Account settings updated.');
         });
       }
+      renderTwoFactorBox(setCard, btnClass, () => renderAMProfileSettingsHelp(role, btnClass));
     }
 
     const helpCard = document.querySelector('#help .card');
@@ -1709,6 +1828,7 @@
           showToast('Profile settings saved.');
         });
       }
+      renderTwoFactorBox(setCard, 'purple-button', () => renderEmployeeAll());
     }
 
     const helpCard = document.querySelector('#help .card');
@@ -1802,6 +1922,14 @@
       );
       if (typeof showScreen === 'function') showScreen('employee-details');
     },
+    async resetTwoFactor(empId) {
+      if (!confirm('Turn off two-step verification for this person? Use this if they lost their phone.')) return;
+      await api(`/api/employees/${empId}/2fa`, 'DELETE');
+      await loadState('admin');
+      renderAdminManagerAll('admin', 'red-button');
+      showToast('Two-step verification reset.');
+    },
+
     async removeEmployee(empId) {
       if (!confirm('Remove this employee from the system?')) return;
       await api(`/api/employees/${empId}`, 'DELETE');

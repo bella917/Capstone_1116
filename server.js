@@ -340,6 +340,8 @@ function initDatabase() {
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours, sliding
 const sessions = new Map(); // token -> { sid, userId, expires }
 const loginAttempts = new Map(); // "ip|username" -> { count, lockedUntil }
+const twoFactorChallenges = new Map(); // challenge -> { userId, expires, attempts }
+const CHALLENGE_TTL_MS = 5 * 60 * 1000; // 5 minutes to enter the code
 const MAX_LOGIN_FAILURES = 5;
 const LOGIN_LOCK_MS = 60 * 1000;
 
@@ -365,6 +367,58 @@ function verifyPassword(plain, stored) {
   const expected = Buffer.from(hash, 'hex');
   const actual = crypto.scryptSync(String(plain), salt, expected.length);
   return crypto.timingSafeEqual(actual, expected);
+}
+
+// ==================== TWO-STEP VERIFICATION (TOTP) ====================
+// Time-based one-time codes (RFC 6238), the same kind Google Authenticator,
+// Microsoft Authenticator and Authy produce: 6 digits that change every 30 seconds.
+// Built with Node's crypto only, so there is nothing extra to install.
+const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+const TOTP_STEP = 30; // seconds a code lasts
+const TOTP_WINDOW = 1; // also accept one step before and after (clock drift)
+
+function base32Encode(buf) {
+  let bits = '';
+  for (const byte of buf) bits += byte.toString(2).padStart(8, '0');
+  let out = '';
+  for (let i = 0; i < bits.length; i += 5) out += B32[parseInt(bits.slice(i, i + 5).padEnd(5, '0'), 2)];
+  return out;
+}
+
+function base32Decode(str) {
+  let bits = '';
+  for (const ch of String(str).replace(/=+$/, '').toUpperCase()) {
+    const i = B32.indexOf(ch);
+    if (i === -1) continue;
+    bits += i.toString(2).padStart(5, '0');
+  }
+  const bytes = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) bytes.push(parseInt(bits.slice(i, i + 8), 2));
+  return Buffer.from(bytes);
+}
+
+function totpAt(secret, counter) {
+  const msg = Buffer.alloc(8);
+  msg.writeUInt32BE(Math.floor(counter / 0x100000000), 0);
+  msg.writeUInt32BE(counter >>> 0, 4);
+  const hmac = crypto.createHmac('sha1', base32Decode(secret)).update(msg).digest();
+  const off = hmac[hmac.length - 1] & 0x0f;
+  const code = ((hmac.readUInt32BE(off) & 0x7fffffff) % 1000000).toString().padStart(6, '0');
+  return code;
+}
+
+// Returns the matching time step (a number) if the code is valid and has not
+// been used already, otherwise null. A code can only be used once.
+function checkTotp(secret, code, lastUsedStep) {
+  const clean = String(code || '').replace(/\s/g, '');
+  if (!/^\d{6}$/.test(clean)) return null;
+  const now = Math.floor(Date.now() / 1000 / TOTP_STEP);
+  for (let d = -TOTP_WINDOW; d <= TOTP_WINDOW; d++) {
+    const step = now + d;
+    const expected = Buffer.from(totpAt(secret, step));
+    if (crypto.timingSafeEqual(expected, Buffer.from(clean)) && step > (lastUsedStep || 0)) return step;
+  }
+  return null;
 }
 
 // Turns <, >, &, quotes into entities so stored text can never run as HTML.
@@ -446,7 +500,9 @@ function homeFor(role) {
 
 function sanitizeUser(u) {
   if (!u) return null;
-  const { password, ...safe } = u;
+  // Never send the password hash or the two-step secret to the browser.
+  const { password, twoFactor, ...safe } = u;
+  safe.twoFactorEnabled = !!(twoFactor && twoFactor.enabled);
   return safe;
 }
 
@@ -576,10 +632,107 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   loginAttempts.delete(key);
+
+  // Step 2: if this account uses two-step verification, do NOT start a session yet.
+  // Hand back a short-lived challenge; the session starts only after a valid code.
+  if (user.twoFactor && user.twoFactor.enabled) {
+    for (const [k, v] of twoFactorChallenges) if (v.expires < Date.now()) twoFactorChallenges.delete(k); // tidy up old ones
+    const challenge = crypto.randomBytes(24).toString('hex');
+    twoFactorChallenges.set(challenge, { userId: user.id, expires: Date.now() + CHALLENGE_TTL_MS, attempts: 0 });
+    return res.json({ twoFactorRequired: true, challenge });
+  }
+  startSession(req, res, user);
+});
+
+// Finishes a login: starts the session and tells the browser where to go.
+function startSession(req, res, user) {
   const token = crypto.randomBytes(32).toString('hex');
   sessions.set(token, { sid: token, userId: user.id, expires: Date.now() + SESSION_TTL_MS });
   setSessionCookie(req, res, token, SESSION_TTL_MS);
   res.json({ user: sanitizeUser(user), redirect: homeFor(user.role).slice(1) });
+}
+
+// Step 2 of login: the 6-digit code from the authenticator app.
+app.post('/api/auth/verify-2fa', (req, res) => {
+  const challenge = String((req.body && req.body.challenge) || '');
+  const code = String((req.body && req.body.code) || '');
+  const c = twoFactorChallenges.get(challenge);
+  if (!c || c.expires < Date.now()) {
+    twoFactorChallenges.delete(challenge);
+    return res.status(401).json({ error: 'That sign-in expired. Please log in again.' });
+  }
+  const db = readDB();
+  const user = db.users.find((u) => u.id === c.userId);
+  if (!user || !user.twoFactor || !user.twoFactor.enabled) {
+    twoFactorChallenges.delete(challenge);
+    return res.status(401).json({ error: 'Please log in again.' });
+  }
+  const step = checkTotp(user.twoFactor.secret, code, user.twoFactor.lastStep);
+  if (!step) {
+    c.attempts += 1;
+    if (c.attempts >= MAX_LOGIN_FAILURES) {
+      twoFactorChallenges.delete(challenge);
+      return res.status(429).json({ error: 'Too many wrong codes. Please log in again.' });
+    }
+    return res.status(401).json({ error: 'That code is not correct. Check your authenticator app and try again.' });
+  }
+  twoFactorChallenges.delete(challenge);
+  user.twoFactor.lastStep = step; // this code cannot be used again
+  writeDB(db);
+  startSession(req, res, user);
+});
+
+// Turn on two-step verification (3 calls): get a secret, scan or type it into an
+// authenticator app, then prove it works by sending one valid code.
+app.post('/api/auth/2fa/setup', requireAuth(), (req, res) => {
+  const db = req.db;
+  const user = db.users.find((u) => u.id === req.user.id);
+  if (user.twoFactor && user.twoFactor.enabled) {
+    return res.status(400).json({ error: 'Two-step verification is already on.' });
+  }
+  const secret = base32Encode(crypto.randomBytes(20));
+  user.twoFactor = { enabled: false, pendingSecret: secret };
+  writeDB(db);
+  const uri = `otpauth://totp/TaskSync:${encodeURIComponent(user.username)}?secret=${secret}&issuer=TaskSync`;
+  res.json({ secret, uri });
+});
+
+app.post('/api/auth/2fa/enable', requireAuth(), (req, res) => {
+  const db = req.db;
+  const user = db.users.find((u) => u.id === req.user.id);
+  if (!user.twoFactor || !user.twoFactor.pendingSecret) {
+    return res.status(400).json({ error: 'Start setup first.' });
+  }
+  const step = checkTotp(user.twoFactor.pendingSecret, req.body && req.body.code, 0);
+  if (!step) return res.status(400).json({ error: 'That code is not correct. Check your authenticator app and try again.' });
+  user.twoFactor = { enabled: true, secret: user.twoFactor.pendingSecret, lastStep: step };
+  writeDB(db);
+  res.json({ twoFactorEnabled: true });
+});
+
+// Turning it off needs BOTH the account password and a current code.
+app.post('/api/auth/2fa/disable', requireAuth(), (req, res) => {
+  const db = req.db;
+  const user = db.users.find((u) => u.id === req.user.id);
+  if (!user.twoFactor || !user.twoFactor.enabled) return res.status(400).json({ error: 'Two-step verification is not on.' });
+  if (!verifyPassword(String((req.body && req.body.password) || ''), user.password)) {
+    return res.status(403).json({ error: 'Password is not correct.' });
+  }
+  const step = checkTotp(user.twoFactor.secret, req.body && req.body.code, user.twoFactor.lastStep);
+  if (!step) return res.status(400).json({ error: 'That code is not correct. Check your authenticator app and try again.' });
+  delete user.twoFactor;
+  writeDB(db);
+  res.json({ twoFactorEnabled: false });
+});
+
+// Lost phone: an administrator can switch off another person's two-step verification.
+app.delete('/api/employees/:id/2fa', requireAuth('admin'), (req, res) => {
+  const db = req.db;
+  const target = db.users.find((u) => u.id === req.params.id);
+  if (!target) return res.status(404).json({ error: 'User not found.' });
+  delete target.twoFactor;
+  writeDB(db);
+  res.json({ success: true });
 });
 
 app.post('/api/auth/logout', (req, res) => {

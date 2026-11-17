@@ -122,3 +122,14 @@ Only Administrators can onboard new employees (from the **My Team** tab, using t
 * **Dates:** "today" now uses the local time zone instead of UTC. Before, anything done after 7 PM Eastern was filed under tomorrow's date (clock-ins, new tasks, default dates).
 * **Layout fix:** `manager.html` had one stray closing tag in the dashboard section that pushed the dashboard cards outside the page content on every manager screen. It is removed.
 * **Tests:** with the server running on fresh data, `node tests/suite.js` and `node tests/flows.js` run 263 checks in total (see `tests/README.txt`).
+
+## Two-Step Verification (added Nov 17)
+
+Any account (employee, manager or administrator) can turn on two-step verification from **Settings**. It uses a time-based one-time code (TOTP, the same standard as Google Authenticator, Microsoft Authenticator and Authy).
+
+* **Turn on:** Settings > Two-Step Verification > Set Up. Add the setup key shown to your authenticator app (Add account > Enter a setup key), then type the 6-digit code it shows and press Turn On.
+* **Log in:** after the correct username and password, a second screen asks for the current 6-digit code. No session starts until the code is right.
+* **Protections:** the code changes every 30 seconds and each code works only once. Five wrong codes cancel that sign-in, and a pending sign-in expires after 5 minutes. The secret key is stored on the server only and is never sent to the browser.
+* **Turn off:** Settings > Two-Step Verification needs your password and a current code. If someone loses their phone, an administrator can press **Reset 2-Step** next to their name on the My Team tab.
+* **Off by default:** nobody is asked for a code until they turn it on, so the demo accounts keep working as before.
+
