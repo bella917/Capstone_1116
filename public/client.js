@@ -1747,13 +1747,9 @@
         .map((x) => `<option value="${x.email}">${x.name} (${x.role})</option>`)
         .join('');
       recipientEmailInput.setAttribute('list', 'ts-recipient-list');
-      if (!recipientEmailInput.value) {
-        const firstMgr =
-          directory.find((x) => x.email === 'manager@tasksync.com') ||
-          directory.find((x) => x.role === 'manager') ||
-          directory[0];
-        if (firstMgr) recipientEmailInput.value = firstMgr.email;
-      }
+      // Recipient starts blank so the employee chooses who to message.
+      recipientEmailInput.value = '';
+      recipientEmailInput.placeholder = 'Choose or type a recipient email';
     }
 
     const msgForm = document.getElementById('message-form');
@@ -1765,7 +1761,12 @@
           event.preventDefault();
           event.stopImmediatePropagation();
           try {
-            const recEmail = document.getElementById('recipient-email').value;
+            const recEmail = document.getElementById('recipient-email').value.trim();
+            if (!recEmail) {
+              document.getElementById('message-status').textContent =
+                'Please choose a recipient before sending.';
+              return;
+            }
             const sent = await api('/api/messages', 'POST', {
               senderId: u.id,
               senderName: document.getElementById('sender-name').value,
